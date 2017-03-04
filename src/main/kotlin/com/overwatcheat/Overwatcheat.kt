@@ -13,6 +13,9 @@ const val HP_BAR_COLOR_TOLERANCE = 2
 
 const val SPEED = 6.0
 
+const val X_OFFSET = 55
+const val Y_OFFSET = 54
+
 fun main(args: Array<String>) {
 	val frameConverter = Java2DFrameConverter()
 	val frameGrabber = FFmpegFrameGrabber("title=Overwatch").apply {
@@ -40,7 +43,7 @@ fun main(args: Array<String>) {
 			x@ for (x in 0..xAxis.lastIndex) {
 				val rgb = xAxis[x] and 0xFF_FF_FF
 				if (abs(rgb - HP_BAR_COLOR) <= HP_BAR_COLOR_TOLERANCE) {
-					aim(x + 55, y + 54)
+					aim(x + X_OFFSET, y + Y_OFFSET)
 					break@y
 				}
 			}
