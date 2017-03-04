@@ -4,15 +4,10 @@ package com.overwatcheat
 
 import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.Java2DFrameConverter
-import java.awt.event.KeyEvent
 import java.lang.Math.abs
-import java.util.concurrent.ThreadLocalRandom
-import kotlin.system.measureTimeMillis
 
-const val SPEED = 6.0
+const val SPEED = 5.12
 const val AIM_KEY = 1 // left click
-const val JUMP_KEY = KeyEvent.VK_SPACE
-const val BHOP_TOGGLE_KEY = KeyEvent.VK_F12
 
 const val HP_BAR_COLOR = 0xFF_00_13
 const val HP_BAR_COLOR_TOLERANCE = 2
@@ -24,10 +19,6 @@ val X_OFFSET = Math.ceil(X_OFFSET_1080p * (Screen.WIDTH / 1920.0)).toInt()
 val Y_OFFSET = Math.ceil(Y_OFFSET_1080p * (Screen.HEIGHT / 1080.0)).toInt()
 
 fun main(args: Array<String>) {
-	var bhop = false
-	var bhopToggled = -1L
-	var lastHop = -1L
-	
 	val frameConverter = Java2DFrameConverter()
 	val frameGrabber = FFmpegFrameGrabber("title=Overwatch").apply {
 		format = "gdigrab"
@@ -42,43 +33,28 @@ fun main(args: Array<String>) {
 	}
 	
 	while (!Thread.interrupted()) {
-		val now = System.currentTimeMillis()
-		
-		if (keyPressed(BHOP_TOGGLE_KEY) && (bhopToggled < 0 || now - bhopToggled > 600)) {
-			bhop = !bhop
-			bhopToggled = System.currentTimeMillis()
-		}
-		
-		if (bhop && (lastHop < 0 || now - lastHop > 50)) {
-			press(JUMP_KEY)
-			Thread.sleep(20L)
-			release(JUMP_KEY)
-		}
+		Thread.sleep(1L) // give the CPU a break
 		
 		if (keyReleased(AIM_KEY)) {
 			Thread.sleep(50)
 			continue
 		}
 		
-		val time = measureTimeMillis {
-			val frame = frameGrabber.grabImage()
-			val img = frameConverter.convert(frame)
-			
-			val yAxis = img.toRGB()
-			
-			y@ for (y in 0..yAxis.lastIndex) {
-				val xAxis = yAxis[y]
-				x@ for (x in 0..xAxis.lastIndex) {
-					val rgb = xAxis[x] and 0xFF_FF_FF
-					if (abs(rgb - HP_BAR_COLOR) <= HP_BAR_COLOR_TOLERANCE) {
-						aim(x + X_OFFSET, y + Y_OFFSET)
-						break@y
-					}
+		val frame = frameGrabber.grabImage() ?: continue
+		val img = frameConverter.convert(frame) ?: continue
+		
+		val yAxis = img.toRGB()
+		
+		y@ for (y in 0..yAxis.lastIndex) {
+			val xAxis = yAxis[y]
+			x@ for (x in 0..xAxis.lastIndex) {
+				val rgb = xAxis[x] and 0xFF_FF_FF
+				if (abs(rgb - HP_BAR_COLOR) <= HP_BAR_COLOR_TOLERANCE) {
+					aim(x + X_OFFSET, y + Y_OFFSET)
+					break@y
 				}
 			}
 		}
-		
-		Thread.sleep(if (time < 10) 5L else 1L) // give the CPU a break
 	}
 }
 
@@ -97,6 +73,6 @@ private fun aim(absX: Int, absY: Int) {
 	
 	val moveX = dX * (dirX * dirX)
 	val moveY = dY * (dirY * dirY)
-	if (moveX != 0.0 || moveY != 0.0)
+	if ((moveX != 0.0 || moveY != 0.0) && moveX < 300 && moveY < 300)
 		mouse(moveX.toInt(), moveY.toInt())
 }
