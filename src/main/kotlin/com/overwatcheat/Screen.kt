@@ -1,11 +1,16 @@
 package com.overwatcheat
 
+import java.awt.Dimension
+import java.awt.Toolkit
+
 object Screen {
 	
-	const val WIDTH = 1920
-	const val HEIGHT = 1080
+	val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
 	
-	const val CENTER_X = WIDTH / 2
-	const val CENTER_Y = HEIGHT / 2
+	val WIDTH = DIMENSION.width
+	val HEIGHT = DIMENSION.height
+	
+	val CENTER_X = WIDTH / 2
+	val CENTER_Y = HEIGHT / 2
 	
 }
