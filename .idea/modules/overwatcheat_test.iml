@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="overwatcheat:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.overwatcheat" external.system.module.type="sourceSet" external.system.module.version="1.0.0" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="1">
+        <option name="compilerInfo">
+          <KotlinCompilerInfo>
+            <option name="compilerSettings">
+              <CompilerSettings />
+            </option>
+            <option name="k2jsCompilerArguments">
+              <K2JSCompilerArguments>
+                <option name="moduleKind" value="plain" />
+              </K2JSCompilerArguments>
+            </option>
+            <option name="k2jvmCompilerArguments">
+              <K2JVMCompilerArguments>
+                <option name="noStdlib" value="true" />
+                <option name="noReflect" value="true" />
+                <option name="moduleName" value="overwatcheat_main" />
+                <option name="jvmTarget" value="1.6" />
+                <option name="addCompilerBuiltIns" value="true" />
+                <option name="languageVersion" value="1.1" />
+                <option name="apiVersion" value="1.1" />
+                <option name="coroutinesWarn" value="true" />
+              </K2JVMCompilerArguments>
+            </option>
+            <option name="_commonCompilerArguments">
+              <DummyImpl>
+                <option name="languageVersion" value="1.1" />
+                <option name="apiVersion" value="1.1" />
+                <option name="pluginClasspaths">
+                  <array />
+                </option>
+                <option name="coroutinesWarn" value="true" />
+                <option name="pluginOptions">
+                  <array />
+                </option>
+              </DummyImpl>
+            </option>
+          </KotlinCompilerInfo>
+        </option>
+        <option name="useProjectSettings" value="false" />
+        <option name="versionInfo">
+          <KotlinVersionInfo>
+            <option name="apiLevel" value="1.1" />
+            <option name="languageLevel" value="1.1" />
+            <option name="targetPlatformName" value="JVM 1.6" />
+          </KotlinVersionInfo>
+        </option>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+    <output-test url="file://$MODULE_DIR$/../../build/classes/test" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test/kotlin" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="overwatcheat_main" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco:javacv-platform:1.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:4.3.0" level="project" />
+    <orderEntry type="library" name="Gradle: net.java.dev.jna:jna-platform:4.3.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco:javacv:1.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv-platform:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg-platform:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flycapture-platform:2.9.3.43-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394-platform:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect-platform:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect2-platform:0.2.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:librealsense-platform:1.9.6-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:videoinput-platform:0.200-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus-platform:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark-platform:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:android-arm:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:android-x86:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:linux-x86:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:linux-x86_64:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:linux-armhf:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:linux-ppc64le:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:macosx-x86_64:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:windows-x86:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:opencv:windows-x86_64:3.1.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:android-arm:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:android-x86:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:linux-x86:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:linux-x86_64:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:linux-armhf:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:linux-ppc64le:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:macosx-x86_64:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:windows-x86:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:ffmpeg:windows-x86_64:3.2.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flycapture:2.9.3.43-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flycapture:linux-x86:2.9.3.43-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flycapture:linux-x86_64:2.9.3.43-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flycapture:linux-armhf:2.9.3.43-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flycapture:windows-x86:2.9.3.43-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flycapture:windows-x86_64:2.9.3.43-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394:linux-x86:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394:linux-x86_64:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394:linux-armhf:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394:linux-ppc64le:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394:macosx-x86_64:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394:windows-x86:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libdc1394:windows-x86_64:2.2.4-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect:linux-x86:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect:linux-x86_64:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect:linux-armhf:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect:linux-ppc64le:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect:macosx-x86_64:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect:windows-x86:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect:windows-x86_64:0.5.3-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect2:0.2.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect2:linux-x86:0.2.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:libfreenect2:linux-x86_64:0.2.0-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:librealsense:1.9.6-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:librealsense:linux-x86:1.9.6-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:librealsense:linux-x86_64:1.9.6-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:videoinput:0.200-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:videoinput:windows-x86:0.200-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:videoinput:windows-x86_64:0.200-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:android-arm:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:android-x86:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:linux-x86:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:linux-x86_64:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:linux-armhf:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:linux-ppc64le:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:macosx-x86_64:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:windows-x86:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:artoolkitplus:windows-x86_64:2.3.1-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:android-arm:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:android-x86:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:linux-x86:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:linux-x86_64:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:linux-armhf:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:linux-ppc64le:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:macosx-x86_64:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:windows-x86:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco.javacpp-presets:flandmark:windows-x86_64:1.07-1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+  </component>
+  <component name="TestModuleProperties" production-module="overwatcheat_main" />
+</module>
