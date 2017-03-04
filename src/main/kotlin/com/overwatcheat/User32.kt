@@ -1,7 +1,6 @@
 package com.overwatcheat
 
 import com.sun.jna.Native
-import com.sun.jna.platform.win32.WinDef
 
 object User32 {
 	
@@ -9,10 +8,10 @@ object User32 {
 	external fun GetKeyState(nVirtKey: Int): Short
 	
 	@JvmStatic
-	external fun GetCursorPos(p: WinDef.POINT): Boolean
+	external fun mouse_event(dwFlags: Int, dx: Int, dy: Int, dwData: Int, dwExtraInfo: Long)
 	
 	@JvmStatic
-	external fun mouse_event(dwFlags: Int, dx: Int, dy: Int, dwData: Int, dwExtraInfo: Long)
+	external fun keybd_event(bVk: Byte, bScan: Byte, dwFlags: Int, dwExtraInfo: Int): Long
 	
 	init {
 		Native.register("user32")
