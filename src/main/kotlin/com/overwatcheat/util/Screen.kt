@@ -1,4 +1,4 @@
-package com.overwatcheat
+package com.overwatcheat.util
 
 import java.awt.Dimension
 import java.awt.Toolkit

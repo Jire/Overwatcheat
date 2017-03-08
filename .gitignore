@@ -5,3 +5,5 @@ build/
 .idea/tasks.xml
 .idea/libraries
 .idea/gradle.xml
+
+config/allatori/renaming-log.xml
