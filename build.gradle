@@ -44,25 +44,6 @@ jar {
 }
 
 shadowJar {
-	baseName = 'overwatcheat-raw'
+	baseName = 'overwatcheat'
 	classifier = null
-	version = null
 }
-
-task allatori(type:Exec) {
-	commandLine 'java', '-jar', 'config/allatori/allatori.jar', 'config/allatori/config.xml'
-}
-
-task overwatcheat {
-	doLast {
-		println("Successfully built to build/libs/client.jar")
-	}
-}
-
-allatori.dependsOn shadowJar
-allatori.mustRunAfter shadowJar
-
-overwatcheat.dependsOn shadowJar
-overwatcheat.dependsOn allatori
-
-overwatcheat.mustRunAfter allatori
