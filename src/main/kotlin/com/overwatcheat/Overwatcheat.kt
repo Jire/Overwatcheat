@@ -72,7 +72,8 @@ object Overwatcheat {
 			aimBot()
 			
 			// give the CPU a break
-			Thread.sleep((SETTINGS.sleepMin + FastRandom[SETTINGS.sleepMax - SETTINGS.sleepMin]).toLong())
+			val sleepTime = SETTINGS.sleepMin + FastRandom[SETTINGS.sleepMax - SETTINGS.sleepMin]
+			if (sleepTime > 0) Thread.sleep(sleepTime.toLong())
 		} while (!Thread.interrupted())
 	}
 	
