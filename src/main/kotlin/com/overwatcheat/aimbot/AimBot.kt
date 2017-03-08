@@ -35,8 +35,8 @@ import java.lang.Math.abs
 private val pixels = Array(CAPTURE_HEIGHT) { IntArray(CAPTURE_WIDTH) } // zero-garbage reuse optimization
 private val speedLocal = SETTINGS.speed / 10.0 // locality optimization
 
-internal fun aimBot() {
-	if (keyPressed(Overwatcheat.SETTINGS.aimKey)) {
+fun aimBot() {
+	if (keyPressed(SETTINGS.aimKey)) {
 		val frame = FRAME_GRABBER.grabImage() ?: return
 		val img = FRAME_CONVERTER.convert(frame) ?: return
 		
