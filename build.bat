@@ -1,4 +1,4 @@
 @echo off
 title Overwatcheat Builder
-call gradlew charlatano
+call gradlew overwatcheat
 pause
