@@ -1,3 +1,5 @@
+import java.nio.file.Files
+
 /*
  * Free, open-source undetected color cheat for Overwatch!
  * Copyright (C) 2017  Thomas G. Nappo
@@ -17,10 +19,10 @@
  */
 
 group 'com.overwatcheat'
-version '1.0.0'
+version '1.0.1'
 
 buildscript {
-	ext.kotlin_version = '1.1.0'
+	ext.kotlin_version = '1.1.2-2'
 	
 	repositories {
 		mavenCentral()
@@ -28,7 +30,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-		classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+		classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
 	}
 }
 
@@ -49,10 +51,10 @@ repositories {
 dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	
-	compile group: 'org.bytedeco', name: 'javacv-platform', version: '1.3.1'
+	compile group: 'org.bytedeco', name: 'javacv-platform', version: '1.3.2'
 	
-	compile group: 'net.java.dev.jna', name: 'jna', version: '4.3.0'
-	compile group: 'net.java.dev.jna', name: 'jna-platform', version: '4.3.0'
+	compile group: 'net.java.dev.jna', name: 'jna', version: '4.4.0'
+	compile group: 'net.java.dev.jna', name: 'jna-platform', version: '4.4.0'
 }
 
 jar {
@@ -62,6 +64,39 @@ jar {
 }
 
 shadowJar {
-	baseName = 'overwatcheat'
+	baseName = 'Overwatcheat'
 	classifier = null
+}
+
+task overwatcheat {
+	doLast {
+		def name = "Overwatcheat $version"
+		
+		def dir = file("build/$name/")
+		if (dir.exists()) dir.deleteDir()
+		dir.mkdirs()
+		
+		def jarName = "${name}.jar"
+		def jar = file(new File(dir, jarName))
+		def allJar = file("build/libs/Overwatcheat-${version}.jar")
+		Files.copy(allJar.toPath(), jar.toPath())
+		
+		def bat = file(new File(dir, "Start ${name}.bat"))
+		Files.write(bat.toPath(), """@echo off
+cd /d "%~dp0"
+title $name
+java -jar "$jarName"
+pause""".getBytes())
+		
+		Files.copy(file("LICENSE.txt").toPath(), file(new File(dir, "LICENSE.txt")).toPath())
+		Files.copy(file("README.md").toPath(), file(new File(dir, "README.md")).toPath())
+	}
+}
+
+overwatcheat.dependsOn shadowJar
+overwatcheat.mustRunAfter shadowJar
+
+sourceSets {
+	main.java.srcDirs += 'src/main/java'
+	main.java.srcDirs += 'src/main/kotlin'
 }
