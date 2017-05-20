@@ -24,9 +24,31 @@ The first step is to compile the source code into a usable cheat program.
 * Double click on the "_build_" (_build.bat_) script and wait for it to complete
 
 Once those steps are complete, the usable cheat program can be found within the _build_
-directory, and will in a directory called **Overwatcheat 1.0.0**.
+directory, and will in a directory called **Overwatcheat 1.0.1**.
 
-From within the **Overwatcheat 1.0.0** directory, you can start the cheat by running
-the _"Start Overwatcheat 1.0.0"_ script.
+From within the **Overwatcheat 1.0.1** directory, you can start the cheat by running
+the _"Start Overwatcheat 1.0.1"_ script.
 
 Before starting the cheat, you should use fullscreen windowed mode!
+
+---
+
+**Copyright** (AGPL-3.0)
+
+```
+Free, open-source undetected color cheat for Overwatch!
+Copyright (C) 2017  Thomas G. Nappo
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+```
