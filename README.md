@@ -33,6 +33,12 @@ Before starting the cheat, you should use fullscreen windowed mode!
 
 ---
 
+**Beginner's Guide Video**
+
+[![Beginner's Video](http://i.imgur.com/liZFwOI.png)](https://www.youtube.com/watch?v=PcSO_L9yMGw "Overwatcheat")
+
+---
+
 **Copyright** (AGPL-3.0)
 
 ```
