@@ -21,7 +21,7 @@ package com.overwatcheat
 import com.overwatcheat.util.Screen
 
 const val HP_BAR_COLOR = 0xFF_00_13
-const val HP_BAR_COLOR_TOLERANCE = 2
+const val HP_BAR_COLOR_TOLERANCE = 4192
 
 const val X_OFFSET_1080p = 55
 const val Y_OFFSET_1080p = 54
