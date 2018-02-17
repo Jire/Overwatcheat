@@ -16,5 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'pixelaimbot'
+package com.pixelaimbot.util
 
+import java.awt.Dimension
+import java.awt.Toolkit
+
+object Screen {
+	
+	val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
+	
+	val WIDTH = DIMENSION.width
+	val HEIGHT = DIMENSION.height
+	
+	val CENTER_X = WIDTH / 2
+	val CENTER_Y = HEIGHT / 2
+	
+}

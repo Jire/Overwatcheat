@@ -16,5 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'pixelaimbot'
+package com.pixelaimbot.util
 
+import com.sun.jna.Native
+import com.sun.jna.Pointer
+import com.sun.jna.platform.win32.WinDef
+
+object User32 {
+
+	init {
+		Native.register("user32")
+	}
+	
+	@JvmStatic
+	external fun GetKeyState(nVirtKey: Int): Short
+	
+	@JvmStatic
+	external fun mouse_event(dwFlags: Int, dx: Int, dy: Int, dwData: Int, dwExtraInfo: Long)
+	
+
+	@JvmStatic
+	external fun GetClientRect(hWnd: Pointer, rect: Pointer): Int
+	
+	@JvmStatic
+	external fun GetCursorPos(p: Pointer): Int
+	
+	@JvmStatic
+	external fun FindWindowA(lpClassName: String?, lpWindowName: String): WinDef.HWND
+	
+	@JvmStatic
+	external fun GetForegroundWindow(): Long
+	
+	@JvmStatic
+	external fun GetWindowRect(hWnd: Pointer, rect: Pointer): Int
+	
+}

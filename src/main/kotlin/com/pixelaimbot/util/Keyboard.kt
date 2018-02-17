@@ -16,5 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'pixelaimbot'
+package com.pixelaimbot.util
 
+import com.pixelaimbot.util.User32
+
+fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
+
+fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
+
+fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)

@@ -18,11 +18,11 @@ import java.nio.file.Files
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-group 'com.overwatcheat'
-version '1.0.1'
 
 buildscript {
-	ext.kotlin_version = '1.1.2-2'
+	ext.kotlin_version = '1.1.3-2'
+	ext.jnaVersion = '4.4.0'
+	ext.gdxVersion = '1.9.6'
 	
 	repositories {
 		mavenCentral()
@@ -34,12 +34,16 @@ buildscript {
 	}
 }
 
-apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin: 'application'
+apply plugin: "idea"
+apply plugin: "java"
+apply plugin: "kotlin"
+apply plugin: "application"
 apply plugin: "com.github.johnrengelman.shadow"
 
-mainClassName = 'com.overwatcheat.Overwatcheat'
+group 'com.pixelaimbot'
+version '1.0.0'
+
+mainClassName = 'com.pixelaimbot.PixelHax'
 
 sourceCompatibility = JavaVersion.VERSION_1_6
 targetCompatibility = JavaVersion.VERSION_1_6
@@ -50,11 +54,21 @@ repositories {
 
 dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-util', version: kotlin_version
+
+	compile group: "org.jire.arrowhead", name: "arrowhead", version: "1.3.3"
+	
+	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+	compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+	
+	compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+	compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 	
 	compile group: 'org.bytedeco', name: 'javacv-platform', version: '1.3.2'
 	
-	compile group: 'net.java.dev.jna', name: 'jna', version: '4.4.0'
-	compile group: 'net.java.dev.jna', name: 'jna-platform', version: '4.4.0'
+	compile group: 'net.java.dev.jna', name: 'jna', version: jnaVersion
+	compile group: 'net.java.dev.jna', name: 'jna-platform', version: jnaVersion
 }
 
 jar {
@@ -64,13 +78,13 @@ jar {
 }
 
 shadowJar {
-	baseName = 'Overwatcheat'
+	baseName = 'Pixelaimbot'
 	classifier = null
 }
 
-task overwatcheat {
+task pixelaimbot {
 	doLast {
-		def name = "Overwatcheat $version"
+		def name = "PixelAimBot $version"
 		
 		def dir = file("build/$name/")
 		if (dir.exists()) dir.deleteDir()
@@ -78,27 +92,36 @@ task overwatcheat {
 		
 		def jarName = "${name}.jar"
 		def jar = file(new File(dir, jarName))
-		def allJar = file("build/libs/Overwatcheat-${version}.jar")
+		def allJar = file("build/libs/PixelAimBot-${version}.jar")
 		Files.copy(allJar.toPath(), jar.toPath())
 		
-		def bat = file(new File(dir, "Start ${name}.bat"))
+		def bat = file(new File(dir, "${name}.bat"))
 		Files.write(bat.toPath(), """@echo off
 cd /d "%~dp0"
-title $name
+title PAB
 java -jar "$jarName"
 pause""".getBytes())
 		
-		Files.copy(file("overwatcheat.cfg").toPath(), file(new File(dir, "overwatcheat.cfg")).toPath())
-		
-		Files.copy(file("LICENSE.txt").toPath(), file(new File(dir, "LICENSE.txt")).toPath())
-		Files.copy(file("README.md").toPath(), file(new File(dir, "README.md")).toPath())
+		// Files.copy(file("pixelaimbot.cfg").toPath(), file(new File(dir, "pixelaimbot.cfg")).toPath())
+
+		def dirSettings = file(new File(dir, "settings"))
+		dirSettings.mkdirs()
+		def settings = file("settings")
+		settings.listFiles().each {
+			Files.copy(it.toPath(), file(new File(dirSettings, it.getName())).toPath())
+		}
+
+		Files.copy(file(project.configurations.compile.find {
+			it.name.startsWith("kotlin-compiler-${kotlin_version}.jar")
+		}).toPath(), file(new File(dir, "kotlin-compiler.jar")).toPath())		
 	}
 }
 
-overwatcheat.dependsOn shadowJar
-overwatcheat.mustRunAfter shadowJar
+pixelaimbot.dependsOn shadowJar
+pixelaimbot.mustRunAfter shadowJar
 
 sourceSets {
 	main.java.srcDirs += 'src/main/java'
 	main.java.srcDirs += 'src/main/kotlin'
+	main.java.srcDirs += 'settings'
 }

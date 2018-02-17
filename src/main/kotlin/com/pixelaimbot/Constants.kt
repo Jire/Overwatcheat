@@ -16,5 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'pixelaimbot'
+package com.pixelaimbot
 
+import com.pixelaimbot.util.Screen
+import com.pixelaimbot.settings.*
+
+val HP_BAR_COLOR = COLOR //0xFF_00_13
+//const val HP_BAR_COLOR = 0xF6_30_35
+//const val HP_BAR_COLOR = 0xFE_00_00
+val HP_BAR_COLOR_TOLERANCE = COLOR_TOLERANCE //2
+
+val X_OFFSET_1080p = if (Overwatch) 55 else x_offset_1080p
+val Y_OFFSET_1080p = if (Overwatch) 54 else y_offset_1080
+
+val X_OFFSET = Math.ceil(X_OFFSET_1080p * (Screen.WIDTH / 1920.0)).toInt()
+val Y_OFFSET = Math.ceil(Y_OFFSET_1080p * (Screen.HEIGHT / 1080.0)).toInt()

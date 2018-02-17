@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/overwatcheat.iml" filepath="$PROJECT_DIR$/.idea/modules/overwatcheat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/overwatcheat_main.iml" filepath="$PROJECT_DIR$/.idea/modules/overwatcheat_main.iml" group="overwatcheat" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/overwatcheat_test.iml" filepath="$PROJECT_DIR$/.idea/modules/overwatcheat_test.iml" group="overwatcheat" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pixelaimbot.iml" filepath="$PROJECT_DIR$/.idea/modules/pixelaimbot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pixelaimbot_main.iml" filepath="$PROJECT_DIR$/.idea/modules/pixelaimbot_main.iml" group="pixelaimbot" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pixelaimbot_test.iml" filepath="$PROJECT_DIR$/.idea/modules/pixelaimbot_test.iml" group="pixelaimbot" />
     </modules>
   </component>
 </project>

@@ -1,4 +1,5 @@
 @echo off
-title Overwatcheat Builder
-call gradlew overwatcheat
+
+title t
+call gradlew pixelaimbot
 pause
