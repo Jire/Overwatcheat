@@ -7,7 +7,7 @@ _Free, open-source undetected color cheat for Overwatch ("universal" version)!_
 
 ***DOES NOT include any bypass for Overwatch's counter-measures***
 
-The default settings are for Overwatch (settings and values), adjust the window title to your obs preview or something.
+The default settings are for Overwatch (settings and values), adjust the window title to your obs preview or something. Everything here was tested by me before making the repository, you should be able to fix on your own in case you want to change the source code (as long as the error isn't really stupid or unknown).
 
 **Available Features**
 * Incredibly efficient frame grabber
