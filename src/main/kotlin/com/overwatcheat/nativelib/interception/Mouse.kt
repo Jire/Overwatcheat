@@ -18,6 +18,7 @@
 
 package com.overwatcheat.nativelib.interception
 
+import com.overwatcheat.Overwatcheat
 import com.overwatcheat.nativelib.Kernel32
 import com.sun.jna.Callback
 
@@ -55,10 +56,10 @@ object Mouse : Thread() {
         0, 0, 0, 0, true
     )
 
-    fun move(x: Int, y: Int, deviceId: Int = 11) {
+    fun move(x: Int, y: Int) {
         stroke.x = x
         stroke.y = y
-        Interception.interception_send(context, deviceId, stroke, 1)
+        Interception.interception_send(context, Overwatcheat.SETTINGS.deviceId, stroke, 1)
     }
 
     init {

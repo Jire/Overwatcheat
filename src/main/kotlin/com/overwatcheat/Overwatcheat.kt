@@ -21,9 +21,10 @@
 package com.overwatcheat
 
 import com.overwatcheat.aimbot.aimBot
+import com.overwatcheat.aimbot.pixels
 import com.overwatcheat.nativelib.HWNDFinder
-import com.overwatcheat.util.FastRandom
 import com.overwatcheat.util.Screen
+import com.overwatcheat.util.toRGB
 import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.FrameConverter
 import org.bytedeco.javacv.Java2DFrameConverter
@@ -58,7 +59,7 @@ object Overwatcheat {
 
         FRAME_GRABBER = FFmpegFrameGrabber("title=${HWNDFinder.projectorWindowTitle}").apply {
             format = "gdigrab"
-            frameRate = 30.0
+            frameRate = 60.0
             imageWidth = CAPTURE_WIDTH
             imageHeight = CAPTURE_HEIGHT
 
@@ -70,6 +71,7 @@ object Overwatcheat {
 
         FRAME_CONVERTER = Java2DFrameConverter()
 
+        CaptureThread.start()
         do {
             val millis = measureTimeMillis { aimBot() }
             if (millis == 0L) Thread.sleep(1)
@@ -77,7 +79,21 @@ object Overwatcheat {
             // give the CPU a break
             /*val sleepTime = SETTINGS.sleepMin + FastRandom[SETTINGS.sleepMax - SETTINGS.sleepMin]
             if (sleepTime > 0) Thread.sleep(sleepTime.toLong())*/
-        } while (!Thread.interrupted())
+        } while (true)
+    }
+
+    object CaptureThread : Thread() {
+
+        @Volatile
+        var yAxis: Array<IntArray>? = null
+
+        override fun run() {
+            do {
+                val frame = FRAME_GRABBER.grabFrame(false, true, true, false, false)
+                val img = FRAME_CONVERTER.convert(frame)
+                yAxis = img.toRGB(pixels)
+            } while (true)
+        }
     }
 
 }

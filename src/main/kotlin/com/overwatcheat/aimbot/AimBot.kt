@@ -23,56 +23,48 @@ import com.overwatcheat.Overwatcheat.CAPTURE_HEIGHT
 import com.overwatcheat.Overwatcheat.CAPTURE_OFFSET_X
 import com.overwatcheat.Overwatcheat.CAPTURE_OFFSET_Y
 import com.overwatcheat.Overwatcheat.CAPTURE_WIDTH
-import com.overwatcheat.Overwatcheat.FRAME_CONVERTER
-import com.overwatcheat.Overwatcheat.FRAME_GRABBER
 import com.overwatcheat.Overwatcheat.SETTINGS
 import com.overwatcheat.nativelib.interception.Mouse
 import com.overwatcheat.util.Screen
 import com.overwatcheat.util.keyPressed
-import com.overwatcheat.util.toRGB
 import kotlin.math.abs
 
-private val pixels = Array(CAPTURE_HEIGHT) { IntArray(CAPTURE_WIDTH) } // zero-garbage reuse optimization
-private val speedLocal = SETTINGS.speed / 10.0 // locality optimization
+val pixels = Array(CAPTURE_HEIGHT) { IntArray(CAPTURE_WIDTH) } // zero-garbage reuse optimization
 
 fun aimBot() {
-    if (keyPressed(SETTINGS.aimKey)) {
-        val frame = FRAME_GRABBER.grabImage() ?: return
-        val img = FRAME_CONVERTER.convert(frame) ?: return
+    if (!keyPressed(SETTINGS.aimKey)) return
+    val yAxis = Overwatcheat.CaptureThread.yAxis ?: return
+    y@ for (y in 0..yAxis.lastIndex) {
+        val xAxis = yAxis[y]
+        for (x in 0..xAxis.lastIndex) {
+            val rgb = xAxis[x] and 0xFF_FF_FF
 
-        val yAxis = img.toRGB(pixels)
+            val r = (rgb and 0xFF_00_00) ushr 16
+            val g = (rgb and 0x00_FF_00) ushr 8
+            val b = rgb and 0x00_00_FF
 
-        y@ for (y in 0..yAxis.lastIndex) {
-            val xAxis = yAxis[y]
-            for (x in 0..xAxis.lastIndex) {
-                val rgb = xAxis[x] and 0xFF_FF_FF
-
-                val r = (rgb and 0xFF_00_00) ushr 16
-                val g = (rgb and 0x00_FF_00) ushr 8
-                val b = rgb and 0x00_00_FF
-
-                val sum = abs(r - SETTINGS.targetColorRed) +
-                        abs(g - SETTINGS.targetColorGreen) +
-                        abs(b - SETTINGS.targetColorBlue)
-                if (sum <= SETTINGS.targetColorTolerance) {
-                    val absX = x + X_OFFSET + CAPTURE_OFFSET_X
-                    val absY = y + Y_OFFSET + CAPTURE_OFFSET_Y
-                    aim(absX, absY)
-                    break@y
-                }
+            val sum = abs(r - SETTINGS.targetColorRed) +
+                    abs(g - SETTINGS.targetColorGreen) +
+                    abs(b - SETTINGS.targetColorBlue)
+            if (sum <= SETTINGS.targetColorTolerance) {
+                val absX = x + X_OFFSET + CAPTURE_OFFSET_X
+                val absY = y + Y_OFFSET + CAPTURE_OFFSET_Y
+                aim(absX, absY)
+                break@y
             }
         }
     }
+    Overwatcheat.CaptureThread.yAxis = null
 }
 
 private fun aim(absX: Int, absY: Int) {
     val dX = absX - Screen.CENTER_X
     val dY = absY - Screen.CENTER_Y
 
-    var dirX = if (dX == 0) 0.0 else speedLocal
+    var dirX = if (dX == 0) 0.0 else SETTINGS.speed
     if (dX < 0) dirX = -dirX
 
-    var dirY = if (dY == 0) 0.0 else speedLocal
+    var dirY = if (dY == 0) 0.0 else SETTINGS.speed
     if (dY < 0) dirY = -dirY
 
     move(dX, dY, dirX, dirY) // split for JIT compile optimization
@@ -81,6 +73,6 @@ private fun aim(absX: Int, absY: Int) {
 private fun move(dX: Int, dY: Int, dirX: Double, dirY: Double) {
     val moveX = dX * (dirX * dirX)
     val moveY = dY * (dirY * dirY)
-    if ((moveX > 0 || moveY > 0) && moveX < Screen.WIDTH / 64 && moveY < Screen.HEIGHT / 64/* && moveX <= CAPTURE_WIDTH / 4 && moveY <= CAPTURE_HEIGHT / 4*/)
+    if ((moveX > 0 || moveY > 0) && moveX <= Screen.WIDTH / 128 && moveY <= Screen.HEIGHT / 128/* && moveX <= CAPTURE_WIDTH / 4 && moveY <= CAPTURE_HEIGHT / 4*/)
         Mouse.move(moveX.toInt(), moveY.toInt())
 }

@@ -18,6 +18,7 @@
 
 package com.overwatcheat.nativelib
 
+import com.overwatcheat.Overwatcheat
 import com.sun.jna.Native
 import com.sun.jna.Pointer
 
@@ -30,7 +31,7 @@ object HWNDFinder {
             val windowTitleArray = ByteArray(512)
             User32.GetWindowTextA(hWnd.pointer, windowTitleArray, windowTitleArray.size)
             val windowTitle = Native.toString(windowTitleArray).trim { it <= ' ' }
-            if (windowTitle.contains("Fullscreen Projector")) {
+            if (windowTitle.contains(Overwatcheat.SETTINGS.windowTitleSearch)) {
                 HWNDFinder.windowTitle = windowTitle
             }
             true
