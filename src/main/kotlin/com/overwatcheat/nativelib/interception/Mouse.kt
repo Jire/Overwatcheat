@@ -20,7 +20,6 @@ package com.overwatcheat.nativelib.interception
 
 import com.overwatcheat.nativelib.Kernel32
 import com.sun.jna.Callback
-import com.sun.jna.Pointer
 
 object Mouse : Thread() {
 
@@ -57,22 +56,10 @@ object Mouse : Thread() {
     )
 
     fun move(x: Int, y: Int, deviceId: Int = 11) {
-        /*val stroke = InterceptionStroke(
-            0x00.toShort(),
-            0x00.toShort(),
-            (InterceptionMouseFlag.INTERCEPTION_MOUSE_MOVE_RELATIVE or
-                    InterceptionMouseFlag.INTERCEPTION_MOUSE_CUSTOM).toShort(),
-            0x00.toShort(),
-            x,
-            y,
-            0,
-            true
-        )*/
         stroke.x = x
         stroke.y = y
         Interception.interception_send(context, deviceId, stroke, 1)
     }
-
 
     init {
         Kernel32.SetPriorityClass(Kernel32.GetCurrentProcess(), Kernel32.HIGH_PRIORITY_CLASS)

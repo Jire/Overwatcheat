@@ -81,6 +81,6 @@ private fun aim(absX: Int, absY: Int) {
 private fun move(dX: Int, dY: Int, dirX: Double, dirY: Double) {
     val moveX = dX * (dirX * dirX)
     val moveY = dY * (dirY * dirY)
-    if ((moveX > 0 || moveY > 0) && moveX <= CAPTURE_WIDTH && moveY <= CAPTURE_HEIGHT)
+    if ((moveX > 0 || moveY > 0) && moveX < Screen.WIDTH / 64 && moveY < Screen.HEIGHT / 64/* && moveX <= CAPTURE_WIDTH / 4 && moveY <= CAPTURE_HEIGHT / 4*/)
         Mouse.move(moveX.toInt(), moveY.toInt())
 }
