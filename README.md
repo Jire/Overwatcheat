@@ -24,10 +24,10 @@ The first step is to compile the source code into a usable cheat program.
 * Double click on the "_build_" (_build.bat_) script and wait for it to complete
 
 Once those steps are complete, the usable cheat program can be found within the _build_
-directory, and will in a directory called **Overwatcheat 2.0.0**.
+directory, and will in a directory called **Overwatcheat 2.1.0**.
 
-From within the **Overwatcheat 2.0.0** directory, you can start the cheat by running
-the _"Start Overwatcheat 2.0.0"_ script.
+From within the **Overwatcheat 2.1.0** directory, you can start the cheat by running
+the _"Start Overwatcheat 2.1.0"_ script.
 
 Before starting the cheat, you should use fullscreen windowed mode!
 
