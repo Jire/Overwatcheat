@@ -25,7 +25,8 @@ class Settings(
     val boxWidthDivisor: Double, val boxHeightDivisor: Double,
     val targetColor: Int, val targetColorTolerance: Int,
     val windowTitleSearch: String,
-    val deviceId: Int
+    val deviceId: Int,
+    val maxDistanceDivisor: Int
 ) {
 
     val targetColorRed = (targetColor and 0xFF_00_00) ushr 16
@@ -53,6 +54,8 @@ class Settings(
 
             var deviceId = 11
 
+            var maxDistanceDivisor = 128
+
             file.readLines().forEach {
                 if (it.contains("=")) {
                     val split = it.split("=")
@@ -65,6 +68,7 @@ class Settings(
                         "target_color_tolerance" -> targetColorTolerance = split[1].toInt()
                         "window_title_search" -> windowTitleSearch = split[1]
                         "device_id" -> deviceId = split[1].toInt()
+                        "max_distance_divisor" -> maxDistanceDivisor = split[1].toInt()
                     }
                 }
             }
@@ -77,7 +81,8 @@ class Settings(
                 targetColor,
                 targetColorTolerance,
                 windowTitleSearch,
-                deviceId
+                deviceId,
+                maxDistanceDivisor
             )
         }
     }

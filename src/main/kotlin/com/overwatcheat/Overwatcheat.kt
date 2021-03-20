@@ -47,6 +47,11 @@ object Overwatcheat {
     var CAPTURE_OFFSET_Y = 0
         private set
 
+    var MOVE_X_MAX = 0
+        private set
+    var MOVE_Y_MAX = 0
+        private set
+
     @JvmStatic
     fun main(args: Array<String>) {
         SETTINGS = Settings.read() // load settings
@@ -56,6 +61,9 @@ object Overwatcheat {
 
         CAPTURE_OFFSET_X = (Screen.WIDTH / 2) - (CAPTURE_WIDTH / 2)
         CAPTURE_OFFSET_Y = (Screen.HEIGHT / 2) - (CAPTURE_HEIGHT / 2)
+
+        MOVE_X_MAX = Screen.WIDTH / SETTINGS.maxDistanceDivisor
+        MOVE_Y_MAX = Screen.HEIGHT / SETTINGS.maxDistanceDivisor
 
         FRAME_GRABBER = FFmpegFrameGrabber("title=${HWNDFinder.projectorWindowTitle}").apply {
             format = "gdigrab"

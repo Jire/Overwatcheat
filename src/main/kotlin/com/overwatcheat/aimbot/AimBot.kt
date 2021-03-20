@@ -73,6 +73,10 @@ private fun aim(absX: Int, absY: Int) {
 private fun move(dX: Int, dY: Int, dirX: Double, dirY: Double) {
     val moveX = dX * (dirX * dirX)
     val moveY = dY * (dirY * dirY)
-    if ((moveX > 0 || moveY > 0) && moveX <= Screen.WIDTH / 128 && moveY <= Screen.HEIGHT / 128/* && moveX <= CAPTURE_WIDTH / 4 && moveY <= CAPTURE_HEIGHT / 4*/)
+    if ((moveX > 0 || moveY > 0)
+        && moveX <= Overwatcheat.MOVE_X_MAX
+        && moveY <= Overwatcheat.MOVE_Y_MAX
+    ) {
         Mouse.move(moveX.toInt(), moveY.toInt())
+    }
 }
