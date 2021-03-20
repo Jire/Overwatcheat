@@ -16,20 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat.nativelib
 
-import com.sun.jna.Native
-
-object User32 {
+interface NativeLib {
 	
-	@JvmStatic
-	external fun GetKeyState(nVirtKey: Int): Short
-	
-	@JvmStatic
-	external fun mouse_event(dwFlags: Int, dx: Int, dy: Int, dwData: Int, dwExtraInfo: Long)
-	
-	init {
-		Native.register("user32")
-	}
+	val libraryName: String
 	
 }

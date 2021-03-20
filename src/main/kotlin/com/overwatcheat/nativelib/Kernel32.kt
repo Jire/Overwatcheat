@@ -16,12 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat.nativelib
 
-import com.overwatcheat.nativelib.User32
+import com.sun.jna.Pointer
 
-fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
+object Kernel32 : DirectNativeLib("kernel32") {
 
-fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
+    const val HIGH_PRIORITY_CLASS = 0x00000080
 
-fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)
+    @JvmStatic
+    external fun SetPriorityClass(hProcess: Pointer, dwPriorityClass: Int): Boolean
+
+    @JvmStatic
+    external fun GetCurrentProcess(): Pointer
+
+}

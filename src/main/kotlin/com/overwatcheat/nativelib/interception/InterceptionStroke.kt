@@ -16,11 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat.nativelib.interception
 
-import com.overwatcheat.util.User32.mouse_event
+import com.sun.jna.Structure
+import com.sun.jna.Structure.FieldOrder
 
-const val MOUSEEVENTF_MOVE = 0x0001
-const val MOUSEEVENTF_ABSOLUTE = 0x8000
-
-fun moveMouse(x: Int, y: Int, flags: Int = MOUSEEVENTF_MOVE) = mouse_event(flags, x, y, 0, 0)
+@FieldOrder("code", "state", "flags", "rolling", "x", "y", "information")
+class InterceptionStroke(
+    @JvmField var code: Short = 0,
+    @JvmField var state: Short = 0,
+    @JvmField var information: Short = 0,
+    @JvmField var rolling: Short = 0,
+    @JvmField var x: Int = 0,
+    @JvmField var y: Int = 0,
+    @JvmField var flags: Short = 0,
+    var isInjected: Boolean = false
+) : Structure()

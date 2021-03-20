@@ -16,12 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat.nativelib
 
-import com.overwatcheat.nativelib.User32
+import com.sun.jna.Native
+import com.sun.jna.Pointer
 
-fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
+object HWNDFinder {
 
-fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
+    private lateinit var windowTitle: String
 
-fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)
+    val projectorWindowTitle by lazy(LazyThreadSafetyMode.NONE) {
+        User32.EnumWindows({ hWnd, _ ->
+            val windowTitleArray = ByteArray(512)
+            User32.GetWindowTextA(hWnd.pointer, windowTitleArray, windowTitleArray.size)
+            val windowTitle = Native.toString(windowTitleArray).trim { it <= ' ' }
+            if (windowTitle.contains("Fullscreen Projector")) {
+                HWNDFinder.windowTitle = windowTitle
+            }
+            true
+        }, Pointer.NULL)
+
+        return@lazy windowTitle
+    }
+
+}

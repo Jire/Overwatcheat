@@ -16,12 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat.nativelib
 
-import com.overwatcheat.nativelib.User32
+import com.sun.jna.Native
+import com.sun.jna.NativeLibrary
 
-fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
-
-fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
-
-fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)
+abstract class DirectNativeLib(final override val libraryName: String) : NativeLib {
+	
+	init {
+		Native.register(javaClass, NativeLibrary.getInstance(libraryName))
+	}
+	
+}

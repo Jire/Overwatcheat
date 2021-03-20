@@ -23,12 +23,12 @@ import java.awt.Toolkit
 
 object Screen {
 	
-	val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
+	val DIMENSION: Dimension = Dimension(2560, 1440)/*Toolkit.getDefaultToolkit().screenSize*/
 	
 	val WIDTH = DIMENSION.width
 	val HEIGHT = DIMENSION.height
 	
 	val CENTER_X = WIDTH / 2
 	val CENTER_Y = HEIGHT / 2
-	
+
 }

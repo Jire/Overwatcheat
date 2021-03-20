@@ -16,12 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat.nativelib
 
-import com.overwatcheat.nativelib.User32
+import com.sun.jna.Pointer
+import com.sun.jna.platform.win32.WinUser
+import com.sun.jna.win32.StdCallLibrary
 
-fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
+object User32 : DirectNativeLib("user32") {
 
-fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
+    @JvmStatic
+    external fun GetKeyState(nVirtKey: Int): Short
 
-fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)
+    @JvmStatic
+    external fun mouse_event(dwFlags: Int, dx: Int, dy: Int, dwData: Int, dwExtraInfo: Long)
+
+    @JvmStatic
+    external fun SetWindowDisplayAffinity(window: Pointer, affinity: Int): Boolean
+
+    @JvmStatic
+    external fun EnumWindows(lpEnumFunc: WinUser.WNDENUMPROC, userData: Pointer?): Boolean
+
+    @JvmStatic
+    external fun GetWindowTextA(hWnd: Pointer, lpString: ByteArray, nMaxCount: Int): Int
+
+    @JvmStatic
+    external fun GetWindow(hWnd: Pointer, uCmd: Int): Pointer
+
+}

@@ -16,12 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat.nativelib.interception
 
-import com.overwatcheat.nativelib.User32
+object InterceptionMouseFlag {
 
-fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
+    const val INTERCEPTION_MOUSE_MOVE_RELATIVE = 0x000
+    const val INTERCEPTION_MOUSE_MOVE_ABSOLUTE = 0x001
+    const val INTERCEPTION_MOUSE_VIRTUAL_DESKTOP = 0x002
+    const val INTERCEPTION_MOUSE_ATTRIBUTES_CHANGED = 0x004
+    const val INTERCEPTION_MOUSE_MOVE_NOCOALESCE = 0x008
+    const val INTERCEPTION_MOUSE_TERMSRV_SRC_SHADOW = 0x100
+    const val INTERCEPTION_MOUSE_CUSTOM = 0x200
 
-fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
-
-fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)
+}
