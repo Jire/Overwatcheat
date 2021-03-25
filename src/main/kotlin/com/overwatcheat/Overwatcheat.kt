@@ -20,16 +20,16 @@
 
 package com.overwatcheat
 
-import com.overwatcheat.aimbot.aimBot
-import com.overwatcheat.aimbot.pixels
 import com.overwatcheat.nativelib.HWNDFinder
+import com.overwatcheat.nativelib.interception.Mouse
+import com.overwatcheat.util.Keyboard.keyPressed
 import com.overwatcheat.util.Screen
-import com.overwatcheat.util.toRGB
 import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.FrameConverter
 import org.bytedeco.javacv.Java2DFrameConverter
 import java.awt.image.BufferedImage
-import kotlin.system.measureTimeMillis
+import java.awt.image.DataBufferByte
+import kotlin.math.abs
 
 object Overwatcheat {
 
@@ -47,27 +47,32 @@ object Overwatcheat {
     var CAPTURE_OFFSET_Y = 0
         private set
 
-    var MOVE_X_MAX = 0
+    var CAPTURE_CENTER_X = 0
         private set
-    var MOVE_Y_MAX = 0
+    var CAPTURE_CENTER_Y = 0
         private set
 
     @JvmStatic
     fun main(args: Array<String>) {
+        Thread.currentThread().priority = Thread.MAX_PRIORITY
+
         SETTINGS = Settings.read() // load settings
 
         CAPTURE_WIDTH = (Screen.WIDTH / SETTINGS.boxWidthDivisor).toInt()
         CAPTURE_HEIGHT = (Screen.HEIGHT / SETTINGS.boxHeightDivisor).toInt()
 
-        CAPTURE_OFFSET_X = (Screen.WIDTH / 2) - (CAPTURE_WIDTH / 2)
-        CAPTURE_OFFSET_Y = (Screen.HEIGHT / 2) - (CAPTURE_HEIGHT / 2)
+        val MAX_SNAP_X = CAPTURE_WIDTH / SETTINGS.maxSnapDivisor
+        val MAX_SNAP_Y = CAPTURE_HEIGHT / SETTINGS.maxSnapDivisor
 
-        MOVE_X_MAX = Screen.WIDTH / SETTINGS.maxDistanceDivisor
-        MOVE_Y_MAX = Screen.HEIGHT / SETTINGS.maxDistanceDivisor
+        CAPTURE_OFFSET_X = (Screen.WIDTH - CAPTURE_WIDTH) / 2
+        CAPTURE_OFFSET_Y = (Screen.HEIGHT - CAPTURE_HEIGHT) / 2
+
+        CAPTURE_CENTER_X = CAPTURE_WIDTH / 2
+        CAPTURE_CENTER_Y = CAPTURE_HEIGHT / 2
 
         FRAME_GRABBER = FFmpegFrameGrabber("title=${HWNDFinder.projectorWindowTitle}").apply {
             format = "gdigrab"
-            frameRate = 60.0
+            frameRate = SETTINGS.fps
             imageWidth = CAPTURE_WIDTH
             imageHeight = CAPTURE_HEIGHT
 
@@ -78,29 +83,36 @@ object Overwatcheat {
         }
 
         FRAME_CONVERTER = Java2DFrameConverter()
+        Colors.init()
 
-        CaptureThread.start()
-        do {
-            val millis = measureTimeMillis { aimBot() }
-            if (millis == 0L) Thread.sleep(1)
+        frames@ while (true) {
+            val frame = FRAME_GRABBER.grabImage()
 
-            // give the CPU a break
-            /*val sleepTime = SETTINGS.sleepMin + FastRandom[SETTINGS.sleepMax - SETTINGS.sleepMin]
-            if (sleepTime > 0) Thread.sleep(sleepTime.toLong())*/
-        } while (true)
-    }
+            if (!keyPressed(SETTINGS.aimKey)) continue
 
-    object CaptureThread : Thread() {
+            val img = FRAME_CONVERTER.convert(frame)
+            val imgWidth = img.width
+            val imgHeight = img.height
+            val pixels = (img.raster.dataBuffer as DataBufferByte).data
 
-        @Volatile
-        var yAxis: Array<IntArray>? = null
+            y@ for (y in 0..imgHeight - 1) {
+                val pixelY = imgWidth * y * 3
+                for (x in 0..imgWidth - 1) {
+                    val pixel = pixelY + (x * 3)
+                    val rgb = (pixels[pixel].toInt() and 0xFF) or // blue
+                            ((pixels[pixel + 1].toInt() and 0xFF) shl 8) or // green
+                            ((pixels[pixel + 2].toInt() and 0xFF) shl 16) // red
+                    if (!Colors.colorMatches(rgb)) continue
 
-        override fun run() {
-            do {
-                val frame = FRAME_GRABBER.grabFrame(false, true, true, false, false)
-                val img = FRAME_CONVERTER.convert(frame)
-                yAxis = img.toRGB(pixels)
-            } while (true)
+                    val dX = x - CAPTURE_CENTER_X + X_OFFSET
+                    if (abs(dX) >= MAX_SNAP_X) continue
+                    val dY = y - CAPTURE_CENTER_Y + Y_OFFSET
+                    if (abs(dY) >= MAX_SNAP_Y) continue
+
+                    Mouse.move((dX / SETTINGS.sensitivity).toInt(), (dY / SETTINGS.sensitivity).toInt())
+                    continue@frames
+                }
+            }
         }
     }
 

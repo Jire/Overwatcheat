@@ -1,14 +1,18 @@
 # Overwatcheat
+
 _Free, open-source undetected color cheat for Overwatch!_
 
 [![Build Status](https://travis-ci.org/Jire/Overwatcheat.svg?branch=master)](https://travis-ci.org/Jire/Overwatcheat)
 [![License](https://img.shields.io/github/license/Jire/Overwatcheat.svg)](https://github.com/Jire/Overwatcheat/blob/master/LICENSE.txt)
 
 **Available Features**
+
 * Incredibly efficient frame grabber
 * Optimized zero-garbage frame pixel scanner
 * Extremely low CPU and memory usage, with minimal effect on FPS
-* Red-pixel HP bar aimbot
+* Magenta-pixel HP bar aimbot
+* Uses Interception driver to avoid mouse event detection
+* Capable of finding an OBS projector window, in case of color ban (error 5)
 
 **Beginner's Guide**
 
@@ -24,12 +28,16 @@ The first step is to compile the source code into a usable cheat program.
 * Double click on the "_build_" (_build.bat_) script and wait for it to complete
 
 Once those steps are complete, the usable cheat program can be found within the _build_
-directory, and will in a directory called **Overwatcheat 2.1.0**.
+directory, and will in a directory called **Overwatcheat 3.0.0**.
 
-From within the **Overwatcheat 2.1.0** directory, you can start the cheat by running
-the _"Start Overwatcheat 2.1.0"_ script.
+From within the **Overwatcheat 3.0.0** directory, you can start the cheat by running the _"Start Overwatcheat 3.0.0"_
+script.
 
-Before starting the cheat, you should use fullscreen windowed mode!
+**Requirements:**
+* Use fullscreen windowed mode if not using OBS projector
+* It is vital to configure sensitivity to be the same as your in-game sens
+* Increasing sensitivity to beyond your sens will give you slower aim  
+* Increasing FPS will increase accuracy
 
 ---
 

@@ -21,17 +21,13 @@ package com.overwatcheat
 import java.io.File
 
 class Settings(
-    val aimKey: Int, val speed: Double,
-    val boxWidthDivisor: Double, val boxHeightDivisor: Double,
-    val targetColor: Int, val targetColorTolerance: Int,
+    val aimKey: Int, val sensitivity: Float, val fps: Double,
+    val boxWidthDivisor: Float, val boxHeightDivisor: Float,
+    val maxSnapDivisor: Float,
+    val targetColors: IntArray, val targetColorTolerance: Int,
     val windowTitleSearch: String,
     val deviceId: Int,
-    val maxDistanceDivisor: Int
 ) {
-
-    val targetColorRed = (targetColor and 0xFF_00_00) ushr 16
-    val targetColorGreen = (targetColor and 0x00_FF_00) ushr 8
-    val targetColorBlue = targetColor and 0x00_00_FF
 
     companion object {
 
@@ -40,49 +36,52 @@ class Settings(
         fun read(filePath: String = DEFAULT_FILE) = read(File(filePath))
 
         fun read(file: File): Settings {
-            var aimKey = 1
+            var aimKey = 5
+            var sensitivity = 10.0F
+            var fps = 60.0
 
-            var speed = 4.0
+            var boxWidthDivisor = 10.0F
+            var boxHeightDivisor = 12.0F
 
-            var boxWidthDivisor = 6.0
-            var boxHeightDivisor = 3.5
+            var maxSnapDivisor = 2.0F
 
-            var targetColor = Integer.parseInt("e23be9", 16)
+            var targetColors = intArrayOf(0xdd32db, 0xdb33d8, 0xe23be9, 0xd619dd, 0xd200d6)
             var targetColorTolerance = 12
 
             var windowTitleSearch = "Overwatch"
 
             var deviceId = 11
 
-            var maxDistanceDivisor = 128
-
             file.readLines().forEach {
                 if (it.contains("=")) {
                     val split = it.split("=")
                     when (split[0]) {
                         "aim_key" -> aimKey = split[1].toInt()
-                        "speed" -> speed = split[1].toDouble()
-                        "box_width_divisor" -> boxWidthDivisor = split[1].toDouble()
-                        "box_height_divisor" -> boxHeightDivisor = split[1].toDouble()
-                        "target_color" -> targetColor = Integer.parseInt(split[1], 16)
+                        "sensitivity" -> sensitivity = split[1].toFloat()
+                        "fps" -> fps = split[1].toDouble()
+                        "box_width_divisor" -> boxWidthDivisor = split[1].toFloat()
+                        "box_height_divisor" -> boxHeightDivisor = split[1].toFloat()
+                        "max_snap_divisor" -> maxSnapDivisor = split[1].toFloat()
+                        "target_colors" -> targetColors =
+                            split[1].split(',').map { i -> Integer.parseInt(i, 16) }.toIntArray()
                         "target_color_tolerance" -> targetColorTolerance = split[1].toInt()
                         "window_title_search" -> windowTitleSearch = split[1]
                         "device_id" -> deviceId = split[1].toInt()
-                        "max_distance_divisor" -> maxDistanceDivisor = split[1].toInt()
                     }
                 }
             }
 
             return Settings(
                 aimKey,
-                speed,
+                sensitivity,
+                fps,
                 boxWidthDivisor,
                 boxHeightDivisor,
-                targetColor,
+                maxSnapDivisor,
+                targetColors,
                 targetColorTolerance,
                 windowTitleSearch,
-                deviceId,
-                maxDistanceDivisor
+                deviceId
             )
         }
     }

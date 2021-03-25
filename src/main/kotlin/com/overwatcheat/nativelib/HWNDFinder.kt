@@ -21,6 +21,7 @@ package com.overwatcheat.nativelib
 import com.overwatcheat.Overwatcheat
 import com.sun.jna.Native
 import com.sun.jna.Pointer
+import com.sun.jna.platform.win32.WinDef
 
 object HWNDFinder {
 
@@ -38,6 +39,23 @@ object HWNDFinder {
         }, Pointer.NULL)
 
         return@lazy windowTitle
+    }
+
+    private lateinit var windowHWND: WinDef.HWND
+
+    val projectorWindowHWND by lazy(LazyThreadSafetyMode.NONE) {
+        User32.EnumWindows({ hwnd, _ ->
+            val windowTitleArray = ByteArray(512)
+            User32.GetWindowTextA(hwnd.pointer, windowTitleArray, windowTitleArray.size)
+            val windowTitle = Native.toString(windowTitleArray).trim { it <= ' ' }
+            if (windowTitle.contains(Overwatcheat.SETTINGS.windowTitleSearch)) {
+                HWNDFinder.windowTitle = windowTitle
+                windowHWND = hwnd
+            }
+            true
+        }, Pointer.NULL)
+
+        return@lazy windowHWND
     }
 
 }
