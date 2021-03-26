@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.nativelib.interception
+package com.overwatcheat
 
-import com.overwatcheat.Overwatcheat
 import com.overwatcheat.nativelib.Kernel32
+import com.overwatcheat.nativelib.interception.Interception
+import com.overwatcheat.nativelib.interception.InterceptionFilter
+import com.overwatcheat.nativelib.interception.InterceptionMouseFlag
+import com.overwatcheat.nativelib.interception.InterceptionStroke
 import com.sun.jna.Callback
 
 object Mouse : Thread() {
@@ -56,10 +59,10 @@ object Mouse : Thread() {
         0, 0, 0, 0, true
     )
 
-    fun move(x: Int, y: Int) {
+    fun move(x: Int, y: Int, deviceID: Int) {
         stroke.x = x
         stroke.y = y
-        Interception.interception_send(context, Overwatcheat.SETTINGS.deviceId, stroke, 1)
+        Interception.interception_send(context, deviceID, stroke, 1)
     }
 
     init {

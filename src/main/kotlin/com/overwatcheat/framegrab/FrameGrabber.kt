@@ -16,16 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat.framegrab
 
-import com.overwatcheat.nativelib.User32
+import org.bytedeco.javacv.FFmpegFrameGrabber
 
-object Keyboard {
+class FrameGrabber(
+    windowTitleSearch: CharSequence,
+    frameRate: Double,
+    imageWidth: Int,
+    imageHeight: Int,
+    captureOffsetX: Int, captureOffsetY: Int,
+    format: String = "gdigrab",
+    filename: String = "title=${FrameWindowFinder.findWindowTitle(windowTitleSearch)}"
+) : FFmpegFrameGrabber(filename) {
 
-    fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
+    init {
+        this.frameRate = frameRate
+        this.imageWidth = imageWidth
+        this.imageHeight = imageHeight
+        this.format = format
 
-    fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
-
-    fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)
+        setOption("offset_x", captureOffsetX.toString())
+        setOption("offset_y", captureOffsetY.toString())
+    }
 
 }

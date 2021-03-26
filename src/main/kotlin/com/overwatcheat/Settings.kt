@@ -27,6 +27,7 @@ class Settings(
     val targetColors: IntArray, val targetColorTolerance: Int,
     val windowTitleSearch: String,
     val deviceId: Int,
+    val aimOffsetX: Int, val aimOffsetY: Int
 ) {
 
     companion object {
@@ -36,8 +37,8 @@ class Settings(
         fun read(filePath: String = DEFAULT_FILE) = read(File(filePath))
 
         fun read(file: File): Settings {
-            var aimKey = 5
-            var sensitivity = 10.0F
+            var aimKey = 1
+            var sensitivity = 15.0F
             var fps = 60.0
 
             var boxWidthDivisor = 10.0F
@@ -46,11 +47,14 @@ class Settings(
             var maxSnapDivisor = 2.0F
 
             var targetColors = intArrayOf(0xdd32db, 0xdb33d8, 0xe23be9, 0xd619dd, 0xd200d6)
-            var targetColorTolerance = 12
+            var targetColorTolerance = 16
 
             var windowTitleSearch = "Overwatch"
 
             var deviceId = 11
+
+            var aimOffsetX = 34
+            var aimOffsetY = 56
 
             file.readLines().forEach {
                 if (it.contains("=")) {
@@ -67,6 +71,8 @@ class Settings(
                         "target_color_tolerance" -> targetColorTolerance = split[1].toInt()
                         "window_title_search" -> windowTitleSearch = split[1]
                         "device_id" -> deviceId = split[1].toInt()
+                        "aim_offset_x" -> aimOffsetX = split[1].toInt()
+                        "aim_offset_y" -> aimOffsetY = split[1].toInt()
                     }
                 }
             }
@@ -81,7 +87,8 @@ class Settings(
                 targetColors,
                 targetColorTolerance,
                 windowTitleSearch,
-                deviceId
+                deviceId,
+                aimOffsetX, aimOffsetY
             )
         }
     }

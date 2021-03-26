@@ -16,13 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat
+package com.overwatcheat.framegrab
 
-import com.overwatcheat.util.Screen
-import kotlin.math.ceil
+import org.bytedeco.javacv.FFmpegFrameGrabber
 
-const val X_OFFSET_1440p = 34
-const val Y_OFFSET_1440p = 56
+class FrameGrabberThread(
+    val frameGrabber: FFmpegFrameGrabber,
+    val frameHandler: FrameHandler
+) : Thread() {
 
-val X_OFFSET = ceil(X_OFFSET_1440p * (Screen.WIDTH / 2560.0)).toInt()
-val Y_OFFSET = ceil(Y_OFFSET_1440p * (Screen.HEIGHT / 1440.0)).toInt()
+    override fun run() {
+        priority = MAX_PRIORITY
+        frameGrabber.start()
+        try {
+            while (!interrupted()) {
+                val frame = frameGrabber.grabFrame(false, true, true, false, false)
+                frameHandler.handle(frame)
+            }
+        } finally {
+            frameGrabber.stop()
+        }
+    }
+
+}

@@ -20,100 +20,61 @@
 
 package com.overwatcheat
 
-import com.overwatcheat.nativelib.HWNDFinder
-import com.overwatcheat.nativelib.interception.Mouse
-import com.overwatcheat.util.Keyboard.keyPressed
-import com.overwatcheat.util.Screen
-import org.bytedeco.javacv.FFmpegFrameGrabber
-import org.bytedeco.javacv.FrameConverter
-import org.bytedeco.javacv.Java2DFrameConverter
-import java.awt.image.BufferedImage
-import java.awt.image.DataBufferByte
-import kotlin.math.abs
+import com.overwatcheat.aimbot.AimColorMatcher
+import com.overwatcheat.aimbot.AimFrameHandler
+import com.overwatcheat.framegrab.FrameGrabber
+import com.overwatcheat.framegrab.FrameGrabberThread
+import com.overwatcheat.framegrab.FrameHandler
+import kotlin.math.ceil
 
 object Overwatcheat {
 
-    lateinit var SETTINGS: Settings
-    lateinit var FRAME_GRABBER: FFmpegFrameGrabber
-    lateinit var FRAME_CONVERTER: FrameConverter<BufferedImage>
-
-    var CAPTURE_WIDTH = 0
-        private set
-    var CAPTURE_HEIGHT = 0
-        private set
-
-    var CAPTURE_OFFSET_X = 0
-        private set
-    var CAPTURE_OFFSET_Y = 0
-        private set
-
-    var CAPTURE_CENTER_X = 0
-        private set
-    var CAPTURE_CENTER_Y = 0
-        private set
-
     @JvmStatic
     fun main(args: Array<String>) {
-        Thread.currentThread().priority = Thread.MAX_PRIORITY
+        val settings = Settings.read() // load settings
 
-        SETTINGS = Settings.read() // load settings
+        val captureWidth = (Screen.WIDTH / settings.boxWidthDivisor).toInt()
+        val captureHeight = (Screen.HEIGHT / settings.boxHeightDivisor).toInt()
 
-        CAPTURE_WIDTH = (Screen.WIDTH / SETTINGS.boxWidthDivisor).toInt()
-        CAPTURE_HEIGHT = (Screen.HEIGHT / SETTINGS.boxHeightDivisor).toInt()
+        val maxSnapX = captureWidth / settings.maxSnapDivisor
+        val maxSnapY = captureHeight / settings.maxSnapDivisor
 
-        val MAX_SNAP_X = CAPTURE_WIDTH / SETTINGS.maxSnapDivisor
-        val MAX_SNAP_Y = CAPTURE_HEIGHT / SETTINGS.maxSnapDivisor
+        val captureOffsetX = (Screen.WIDTH - captureWidth) / 2
+        val captureOffsetY = (Screen.HEIGHT - captureHeight) / 2
 
-        CAPTURE_OFFSET_X = (Screen.WIDTH - CAPTURE_WIDTH) / 2
-        CAPTURE_OFFSET_Y = (Screen.HEIGHT - CAPTURE_HEIGHT) / 2
+        val captureCenterX = captureWidth / 2
+        val captureCenterY = captureHeight / 2
 
-        CAPTURE_CENTER_X = CAPTURE_WIDTH / 2
-        CAPTURE_CENTER_Y = CAPTURE_HEIGHT / 2
+        val aimColorMatcher = AimColorMatcher(
+            settings.targetColorTolerance,
+            *settings.targetColors
+        )
+        aimColorMatcher.initializeMatchSet()
 
-        FRAME_GRABBER = FFmpegFrameGrabber("title=${HWNDFinder.projectorWindowTitle}").apply {
-            format = "gdigrab"
-            frameRate = SETTINGS.fps
-            imageWidth = CAPTURE_WIDTH
-            imageHeight = CAPTURE_HEIGHT
+        val aimOffsetX = ceil(settings.aimOffsetX * (Screen.WIDTH / 2560.0)).toInt()
+        val aimOffsetY = ceil(settings.aimOffsetY * (Screen.HEIGHT / 1440.0)).toInt()
 
-            setOption("offset_x", CAPTURE_OFFSET_X.toString())
-            setOption("offset_y", CAPTURE_OFFSET_Y.toString())
+        val frameHandler: FrameHandler = AimFrameHandler(
+            settings.aimKey,
+            aimColorMatcher,
+            settings.sensitivity,
+            captureCenterX, captureCenterY,
+            aimOffsetX, aimOffsetY,
+            maxSnapX, maxSnapY,
+            settings.deviceId
+        )
 
-            start()
-        }
+        val frameGrabber = FrameGrabber(
+            settings.windowTitleSearch,
+            settings.fps,
+            captureWidth,
+            captureHeight,
+            captureOffsetX,
+            captureOffsetY
+        )
 
-        FRAME_CONVERTER = Java2DFrameConverter()
-        Colors.init()
-
-        frames@ while (true) {
-            val frame = FRAME_GRABBER.grabImage()
-
-            if (!keyPressed(SETTINGS.aimKey)) continue
-
-            val img = FRAME_CONVERTER.convert(frame)
-            val imgWidth = img.width
-            val imgHeight = img.height
-            val pixels = (img.raster.dataBuffer as DataBufferByte).data
-
-            y@ for (y in 0..imgHeight - 1) {
-                val pixelY = imgWidth * y * 3
-                for (x in 0..imgWidth - 1) {
-                    val pixel = pixelY + (x * 3)
-                    val rgb = (pixels[pixel].toInt() and 0xFF) or // blue
-                            ((pixels[pixel + 1].toInt() and 0xFF) shl 8) or // green
-                            ((pixels[pixel + 2].toInt() and 0xFF) shl 16) // red
-                    if (!Colors.colorMatches(rgb)) continue
-
-                    val dX = x - CAPTURE_CENTER_X + X_OFFSET
-                    if (abs(dX) >= MAX_SNAP_X) continue
-                    val dY = y - CAPTURE_CENTER_Y + Y_OFFSET
-                    if (abs(dY) >= MAX_SNAP_Y) continue
-
-                    Mouse.move((dX / SETTINGS.sensitivity).toInt(), (dY / SETTINGS.sensitivity).toInt())
-                    continue@frames
-                }
-            }
-        }
+        val frameGrabberThread = FrameGrabberThread(frameGrabber, frameHandler)
+        frameGrabberThread.start()
     }
 
 }

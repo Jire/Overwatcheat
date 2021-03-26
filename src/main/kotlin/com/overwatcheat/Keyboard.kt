@@ -16,16 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.util
+package com.overwatcheat
 
-import java.awt.Dimension
-import java.awt.Toolkit
+import com.overwatcheat.nativelib.User32
 
-object Screen {
+object Keyboard {
 
-    private val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
+    fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
 
-    val WIDTH = DIMENSION.width
-    val HEIGHT = DIMENSION.height
+    fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
+
+    fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)
 
 }
