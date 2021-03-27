@@ -26,7 +26,7 @@ object FrameWindowFinder {
 
     private const val WINDOW_TITLE_BYTES_SIZE = 512
 
-    private lateinit var windowTitle: CharSequence
+    private var windowTitle: CharSequence? = null
 
     fun findWindowTitle(windowTitleSearch: CharSequence): CharSequence {
         User32.EnumWindows({ hwnd, _ ->
@@ -38,7 +38,11 @@ object FrameWindowFinder {
             }
             true
         }, Pointer.NULL)
-        return windowTitle
+
+        if (windowTitle == null) {
+            throw Exception("Could not find window title with search: \"$windowTitleSearch\"")
+        }
+        return windowTitle!!
     }
 
 }

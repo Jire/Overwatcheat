@@ -18,37 +18,25 @@
 
 package com.overwatcheat.aimbot
 
-import com.overwatcheat.Keyboard
-import com.overwatcheat.Mouse
 import com.overwatcheat.framegrab.FrameHandler
 import org.bytedeco.javacv.Frame
 import java.nio.ByteBuffer
-import kotlin.math.abs
 
-class AimFrameHandler(
-    val aimKey: Int,
-    val colorMatcher: AimColorMatcher,
-    val sensitivity: Float,
-    val captureCenterX: Int, val captureCenterY: Int,
-    val aimOffsetX: Int, val aimOffsetY: Int,
-    val maxSnapX: Float, val maxSnapY: Float,
-    val deviceID: Int
-) : FrameHandler {
+class AimFrameHandler(val colorMatcher: AimColorMatcher) : FrameHandler {
 
     override fun handle(frame: Frame) {
-        if (!Keyboard.keyPressed(aimKey)) return
-
         val frameWidth = frame.imageWidth
         val frameHeight = frame.imageHeight
         val data = frame.image[0] as ByteBuffer
 
-        y@ for (y in 0..frameHeight - 1) {
+        for (y in 0..frameHeight - 1) {
             val dataIndexBase = frameWidth * y * 3
             for (x in 0..frameWidth - 1) {
                 val dataIndex = dataIndexBase + (x * 3)
                 if (usedDataIndex(data, dataIndex, x, y)) return
             }
         }
+        AimBotState.colorCoord = 0
     }
 
     private fun usedDataIndex(data: ByteBuffer, dataIndex: Int, x: Int, y: Int): Boolean {
@@ -59,16 +47,7 @@ class AimFrameHandler(
         val rgb = (red shl 16) or (green shl 8) or blue
         if (!colorMatcher.colorMatches(rgb)) return false
 
-        val deltaX = x - captureCenterX + aimOffsetX
-        if (abs(deltaX) >= maxSnapX) return false
-        val deltaY = y - captureCenterY + aimOffsetY
-        if (abs(deltaY) >= maxSnapY) return false
-
-        Mouse.move(
-            (deltaX / sensitivity).toInt(),
-            (deltaY / sensitivity).toInt(),
-            deviceID
-        )
+        AimBotState.colorCoord = (x.toLong() shl 32) or y.toLong()
         return true
     }
 

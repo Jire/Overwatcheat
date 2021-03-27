@@ -16,26 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.framegrab
+package com.overwatcheat
 
-import org.bytedeco.javacv.FFmpegFrameGrabber
+import java.util.*
+import kotlin.math.abs
 
-class FrameGrabberThread(
-    val frameGrabber: FFmpegFrameGrabber,
-    val frameHandler: FrameHandler
-) : Thread("Frame Grabber") {
+class FastRandom {
 
-    override fun run() {
-        priority = MAX_PRIORITY
-        frameGrabber.start()
-        try {
-            while (!interrupted()) {
-                val frame = frameGrabber.grabImage()
-                frameHandler.handle(frame)
-            }
-        } finally {
-            frameGrabber.stop()
-        }
+    private var x = Random().nextLong()
+
+    operator fun get(max: Int): Int {
+        x = x xor (x shr 12)
+        x = x xor (x shl 25)
+        x = x xor (x shr 27)
+        x *= 2685821657736338717L
+
+        val factor = abs(x) / Long.MAX_VALUE.toDouble()
+        return (max * factor).toInt()
     }
 
 }

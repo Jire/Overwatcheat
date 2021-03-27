@@ -16,26 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat.framegrab
+package com.overwatcheat.aimbot
 
-import org.bytedeco.javacv.FFmpegFrameGrabber
+object AimBotState {
 
-class FrameGrabberThread(
-    val frameGrabber: FFmpegFrameGrabber,
-    val frameHandler: FrameHandler
-) : Thread("Frame Grabber") {
-
-    override fun run() {
-        priority = MAX_PRIORITY
-        frameGrabber.start()
-        try {
-            while (!interrupted()) {
-                val frame = frameGrabber.grabImage()
-                frameHandler.handle(frame)
-            }
-        } finally {
-            frameGrabber.stop()
-        }
-    }
+    @Volatile
+    var colorCoord = 0L
 
 }

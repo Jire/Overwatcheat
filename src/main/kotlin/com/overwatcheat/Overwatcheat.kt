@@ -20,6 +20,7 @@
 
 package com.overwatcheat
 
+import com.overwatcheat.aimbot.AimBotThread
 import com.overwatcheat.aimbot.AimColorMatcher
 import com.overwatcheat.aimbot.AimFrameHandler
 import com.overwatcheat.framegrab.FrameGrabber
@@ -31,13 +32,10 @@ object Overwatcheat {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val settings = Settings.read() // load settings
+        val settings = Settings.read()
 
         val captureWidth = (Screen.WIDTH / settings.boxWidthDivisor).toInt()
         val captureHeight = (Screen.HEIGHT / settings.boxHeightDivisor).toInt()
-
-        val maxSnapX = captureWidth / settings.maxSnapDivisor
-        val maxSnapY = captureHeight / settings.maxSnapDivisor
 
         val captureOffsetX = (Screen.WIDTH - captureWidth) / 2
         val captureOffsetY = (Screen.HEIGHT - captureHeight) / 2
@@ -51,18 +49,7 @@ object Overwatcheat {
         )
         aimColorMatcher.initializeMatchSet()
 
-        val aimOffsetX = ceil(settings.aimOffsetX * (Screen.WIDTH / 2560.0)).toInt()
-        val aimOffsetY = ceil(settings.aimOffsetY * (Screen.HEIGHT / 1440.0)).toInt()
-
-        val frameHandler: FrameHandler = AimFrameHandler(
-            settings.aimKey,
-            aimColorMatcher,
-            settings.sensitivity,
-            captureCenterX, captureCenterY,
-            aimOffsetX, aimOffsetY,
-            maxSnapX, maxSnapY,
-            settings.deviceId
-        )
+        val frameHandler: FrameHandler = AimFrameHandler(aimColorMatcher)
 
         val frameGrabber = FrameGrabber(
             settings.windowTitleSearch,
@@ -74,7 +61,26 @@ object Overwatcheat {
         )
 
         val frameGrabberThread = FrameGrabberThread(frameGrabber, frameHandler)
+
+        val aimOffsetX = ceil(settings.aimOffsetX * (Screen.WIDTH / 2560.0)).toInt()
+        val aimOffsetY = ceil(settings.aimOffsetY * (Screen.HEIGHT / 1440.0)).toInt()
+
+        val maxSnapX = (captureWidth / settings.maxSnapDivisor).toInt()
+        val maxSnapY = (captureHeight / settings.maxSnapDivisor).toInt()
+
+        val aimBotThread = AimBotThread(
+            settings.aimKey,
+            settings.sensitivity,
+            settings.aimDurationMillis,
+            settings.aimJitterPercent,
+            captureCenterX, captureCenterY,
+            aimOffsetX, aimOffsetY,
+            maxSnapX, maxSnapY,
+            settings.deviceId
+        )
+
         frameGrabberThread.start()
+        aimBotThread.start()
     }
 
 }

@@ -21,7 +21,7 @@ package com.overwatcheat
 import java.io.File
 
 class Settings(
-    val aimKey: Int, val sensitivity: Float, val fps: Double,
+    val aimKey: Int, val sensitivity: Float, val fps: Double, val aimDurationMillis: Long, val aimJitterPercent: Int,
     val boxWidthDivisor: Float, val boxHeightDivisor: Float,
     val maxSnapDivisor: Float,
     val targetColors: IntArray, val targetColorTolerance: Int,
@@ -40,6 +40,8 @@ class Settings(
             var aimKey = 1
             var sensitivity = 15.0F
             var fps = 60.0
+            var aimJitterPercent = 50
+            var aimDurationMillis = (1000L / fps).toLong() + 1L // 17 if fps is 60
 
             var boxWidthDivisor = 10.0F
             var boxHeightDivisor = 12.0F
@@ -63,6 +65,8 @@ class Settings(
                         "aim_key" -> aimKey = split[1].toInt()
                         "sensitivity" -> sensitivity = split[1].toFloat()
                         "fps" -> fps = split[1].toDouble()
+                        "aim_duration_millis" -> aimDurationMillis = split[1].toLong()
+                        "aim_jitter_percent" -> aimJitterPercent = split[1].toInt()
                         "box_width_divisor" -> boxWidthDivisor = split[1].toFloat()
                         "box_height_divisor" -> boxHeightDivisor = split[1].toFloat()
                         "max_snap_divisor" -> maxSnapDivisor = split[1].toFloat()
@@ -81,6 +85,8 @@ class Settings(
                 aimKey,
                 sensitivity,
                 fps,
+                aimDurationMillis,
+                aimJitterPercent,
                 boxWidthDivisor,
                 boxHeightDivisor,
                 maxSnapDivisor,
