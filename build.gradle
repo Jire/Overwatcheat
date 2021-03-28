@@ -52,8 +52,6 @@ dependencies {
 	implementation group: 'net.java.dev.jna', name: 'jna-platform', version: '5.7.0'
 	
 	implementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.5.2'
-	
-	implementation group: 'com.github.joonasvali.naturalmouse', name: 'naturalmouse', version: '2.0.2'
 }
 
 jar {
