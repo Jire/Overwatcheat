@@ -87,7 +87,6 @@ java -jar "$jarName"
 pause""".getBytes())
 		
 		Files.copy(file("overwatcheat.cfg").toPath(), file(new File(dir, "overwatcheat.cfg")).toPath())
-		Files.copy(file("interception.dll").toPath(), file(new File(dir, "interception.dll")).toPath())
 		
 		Files.copy(file("LICENSE.txt").toPath(), file(new File(dir, "LICENSE.txt")).toPath())
 		Files.copy(file("README.md").toPath(), file(new File(dir, "README.md")).toPath())
