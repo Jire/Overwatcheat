@@ -34,8 +34,8 @@ object Overwatcheat {
     fun main(args: Array<String>) {
         val settings = Settings.read()
 
-        val captureWidth = (Screen.WIDTH / settings.boxWidthDivisor).toInt()
-        val captureHeight = (Screen.HEIGHT / settings.boxHeightDivisor).toInt()
+        val captureWidth = 256//(Screen.WIDTH / settings.boxWidthDivisor).toInt()
+        val captureHeight = 256//(Screen.HEIGHT / settings.boxHeightDivisor).toInt()
 
         val captureOffsetX = (Screen.WIDTH - captureWidth) / 2
         val captureOffsetY = (Screen.HEIGHT - captureHeight) / 2

@@ -21,7 +21,6 @@ package com.overwatcheat.aimbot
 import com.overwatcheat.FastRandom
 import com.overwatcheat.Keyboard
 import com.overwatcheat.Mouse
-import kotlin.math.min
 import kotlin.system.measureTimeMillis
 
 class AimBotThread(
@@ -44,27 +43,28 @@ class AimBotThread(
                     AimBotState.aimData = 0
                     return@measureTimeMillis
                 }
-//65, 45, 43
                 val colorCoord = AimBotState.aimData
                 if (colorCoord == 0L) return@measureTimeMillis
-//size=127, 56,66
-                val size = colorCoord and 0xFFFF
-                if (size < 20 || size > 220) return@measureTimeMillis
-                val scale = if (size < 20 || size > 220) 1F else size / 65.0F
-                //size=109, 56, 36
-//size=110, 53,53
-                val colorX = (colorCoord ushr 32).toInt() and 0xFFFF
-                val deltaX = min(maxSnapX, colorX - captureCenterX + (aimOffsetX * scale).toInt())
 
-                val colorY = (colorCoord ushr 16).toInt() and 0xFFFF
-                val deltaY = min(maxSnapY, colorY - captureCenterY + (aimOffsetY * scale).toInt())
+                val xLow = (colorCoord ushr 48) and 0xFFFF
+                val xHigh = (colorCoord ushr 32) and 0xFFFF
+                val yLow = (colorCoord ushr 16) and 0xFFFF
+                val yHigh = colorCoord and 0xFFFF
 
-                //println("($colorX,$colorY) size=$size scale=$scale")
+                val cx = (xLow + ((xHigh - xLow) / 2)).toInt()
+                val cy = (yLow + ((yHigh - yLow) / 2 * 0.81)).toInt()
+
+                val dx = cx - captureCenterX
+                val dy = cy - captureCenterY
+
+                //println("$cx,$cy and $dx,$dy cuz $captureCenterX,$captureCenterY x($xLow,$xHigh) y($yLow,$yHigh)")
 
                 val randomSensitivityMultiplier = 1F//1F - (random[aimJitterPercent] / 100F)
+                val dxP = dx / 10F
+                val dyP = dy / 10F
                 Mouse.move(
-                    (deltaX / sensitivity * randomSensitivityMultiplier).toInt(),
-                    (deltaY / sensitivity * randomSensitivityMultiplier).toInt(),
+                    /*if (dxP > 0 && dxP < 1) 1 else if (dxP < 0 && dxP > -1) -1 else */dxP.toInt(),
+                    /*if (dyP > 0 && dyP < 1) 1 else if (dyP < 0 && dyP > -1) -1 else */dyP.toInt(),
                     deviceID
                 )
             }
