@@ -16,7 +16,7 @@
             <array>
               <option value="$MODULE_DIR$/../../build/classes/java/main" />
               <option value="$MODULE_DIR$/../../build/classes/kotlin/main" />
-              <option value="$MODULE_DIR$/../../build/libs/overwatcheat-3.2.0.jar" />
+              <option value="$MODULE_DIR$/../../build/libs/overwatcheat-3.3.0.jar" />
             </array>
           </option>
           <option name="languageVersion" value="1.4" />

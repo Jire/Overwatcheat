@@ -44,34 +44,39 @@ class AimBotThread(
                     AimBotState.aimData = 0
                     return@measureTimeMillis
                 }
-                val colorCoord = AimBotState.aimData
-                if (colorCoord == 0L) return@measureTimeMillis
-
-                val xLow = (colorCoord ushr 48) and 0xFFFF
-                val xHigh = (colorCoord ushr 32) and 0xFFFF
-                val yLow = (colorCoord ushr 16) and 0xFFFF
-                val yHigh = colorCoord and 0xFFFF
-
-                val aimX = (xLow + ((xHigh - xLow) / 2 * aimOffsetX)).toInt()
-                val aimY = (yLow + ((yHigh - yLow) / 2 * aimOffsetY)).toInt()
-
-                val dX = aimX - captureCenterX
-                val dY = aimY - captureCenterY
-
-                if (abs(dX) > maxSnapX || abs(dY) > maxSnapY) return@measureTimeMillis
-
-                //val randomSensitivityMultiplier = 1F - (random[aimJitterPercent] / 100F)
-                Mouse.move(
-                    (dX / sensitivity/* * randomSensitivityMultiplier*/).toInt(),
-                    (dY / sensitivity/* * randomSensitivityMultiplier*/).toInt(),
-                    deviceID
-                )
+                useAimData(AimBotState.aimData)
             }
-            val sleepTime = aimDurationMillis/* + random[2]*/ - elapsed
+            val sleepTime = aimDurationMillis + random[1] - elapsed
             if (sleepTime > 0) {
                 sleep(sleepTime)
             }
         }
+    }
+
+    private fun useAimData(aimData: Long) {
+        if (aimData == 0L) return
+
+        val xLow = (aimData ushr 48) and 0xFFFF
+        val xHigh = (aimData ushr 32) and 0xFFFF
+        val yLow = (aimData ushr 16) and 0xFFFF
+        val yHigh = aimData and 0xFFFF
+
+        val xLowOffset = (xHigh - xLow) / 2 * aimOffsetX
+        val aimX = (xLow + xLowOffset).toInt()
+        val yLowOffset = (yHigh - yLow) / 2 * aimOffsetY
+        val aimY = (yLow + yLowOffset).toInt()
+
+        val dX = aimX - captureCenterX
+        val dY = aimY - captureCenterY
+
+        if (abs(dX) > maxSnapX || abs(dY) > maxSnapY) return
+
+        val randomSensitivityMultiplier = 1F - (random[aimJitterPercent] / 100F)
+        Mouse.move(
+            (dX / sensitivity * randomSensitivityMultiplier).toInt(),
+            (dY / sensitivity * randomSensitivityMultiplier).toInt(),
+            deviceID
+        )
     }
 
 }

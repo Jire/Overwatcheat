@@ -49,7 +49,7 @@ class AimFrameHandler(val colorMatcher: AimColorMatcher) : FrameHandler {
         }
 
         AimBotState.aimData =
-            if (found && xHigh != Int.MIN_VALUE && xLow != Int.MAX_VALUE && yHigh != Int.MIN_VALUE && yLow != Int.MAX_VALUE)
+            if (found)
                 (xLow.toLong() shl 48) or
                         (xHigh.toLong() shl 32) or
                         (yLow.toLong() shl 16) or
