@@ -44,13 +44,13 @@ class AimBotThread(
                     AimBotState.aimData = 0
                     return@measureTimeMillis
                 }
-
+//65, 45, 43
                 val colorCoord = AimBotState.aimData
                 if (colorCoord == 0L) return@measureTimeMillis
 //size=127, 56,66
                 val size = colorCoord and 0xFFFF
                 if (size < 20 || size > 220) return@measureTimeMillis
-                val scale = if (size < 20 || size > 220) 1F else size / 110.0F
+                val scale = if (size < 20 || size > 220) 1F else size / 65.0F
                 //size=109, 56, 36
 //size=110, 53,53
                 val colorX = (colorCoord ushr 32).toInt() and 0xFFFF
