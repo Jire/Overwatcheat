@@ -22,12 +22,12 @@ import java.io.File
 
 class Settings(
     val aimKey: Int, val sensitivity: Float, val fps: Double, val aimDurationMillis: Long, val aimJitterPercent: Int,
-    val boxWidthDivisor: Float, val boxHeightDivisor: Float,
+    val boxWidth: Int, val boxHeight: Int,
     val maxSnapDivisor: Float,
     val targetColors: IntArray, val targetColorTolerance: Int,
     val windowTitleSearch: String,
     val deviceId: Int,
-    val aimOffsetX: Int, val aimOffsetY: Int
+    val aimOffsetX: Float, val aimOffsetY: Float
 ) {
 
     companion object {
@@ -43,8 +43,8 @@ class Settings(
             var aimJitterPercent = 50
             var aimDurationMillis = (1000L / fps).toLong() + 1L // 17 if fps is 60
 
-            var boxWidthDivisor = 10.0F
-            var boxHeightDivisor = 12.0F
+            var boxWidth = 180
+            var boxHeight = 180
 
             var maxSnapDivisor = 2.0F
 
@@ -55,8 +55,8 @@ class Settings(
 
             var deviceId = 11
 
-            var aimOffsetX = 34
-            var aimOffsetY = 56
+            var aimOffsetX = 1.04F
+            var aimOffsetY = 0.76F
 
             file.readLines().forEach {
                 if (it.contains("=")) {
@@ -67,16 +67,16 @@ class Settings(
                         "fps" -> fps = split[1].toDouble()
                         "aim_duration_millis" -> aimDurationMillis = split[1].toLong()
                         "aim_jitter_percent" -> aimJitterPercent = split[1].toInt()
-                        "box_width_divisor" -> boxWidthDivisor = split[1].toFloat()
-                        "box_height_divisor" -> boxHeightDivisor = split[1].toFloat()
+                        "box_width" -> boxWidth = split[1].toInt()
+                        "box_height" -> boxHeight = split[1].toInt()
                         "max_snap_divisor" -> maxSnapDivisor = split[1].toFloat()
                         "target_colors" -> targetColors =
                             split[1].split(',').map { i -> Integer.parseInt(i, 16) }.toIntArray()
                         "target_color_tolerance" -> targetColorTolerance = split[1].toInt()
                         "window_title_search" -> windowTitleSearch = split[1]
                         "device_id" -> deviceId = split[1].toInt()
-                        "aim_offset_x" -> aimOffsetX = split[1].toInt()
-                        "aim_offset_y" -> aimOffsetY = split[1].toInt()
+                        "aim_offset_x" -> aimOffsetX = split[1].toFloat()
+                        "aim_offset_y" -> aimOffsetY = split[1].toFloat()
                     }
                 }
             }
@@ -87,8 +87,8 @@ class Settings(
                 fps,
                 aimDurationMillis,
                 aimJitterPercent,
-                boxWidthDivisor,
-                boxHeightDivisor,
+                boxWidth,
+                boxHeight,
                 maxSnapDivisor,
                 targetColors,
                 targetColorTolerance,

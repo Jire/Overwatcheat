@@ -26,7 +26,6 @@ import com.overwatcheat.aimbot.AimFrameHandler
 import com.overwatcheat.framegrab.FrameGrabber
 import com.overwatcheat.framegrab.FrameGrabberThread
 import com.overwatcheat.framegrab.FrameHandler
-import kotlin.math.ceil
 
 object Overwatcheat {
 
@@ -34,8 +33,8 @@ object Overwatcheat {
     fun main(args: Array<String>) {
         val settings = Settings.read()
 
-        val captureWidth = 256//(Screen.WIDTH / settings.boxWidthDivisor).toInt()
-        val captureHeight = 256//(Screen.HEIGHT / settings.boxHeightDivisor).toInt()
+        val captureWidth = settings.boxWidth
+        val captureHeight = settings.boxHeight
 
         val captureOffsetX = (Screen.WIDTH - captureWidth) / 2
         val captureOffsetY = (Screen.HEIGHT - captureHeight) / 2
@@ -62,9 +61,6 @@ object Overwatcheat {
 
         val frameGrabberThread = FrameGrabberThread(frameGrabber, frameHandler)
 
-        val aimOffsetX = ceil(settings.aimOffsetX * (Screen.WIDTH / 2560.0)).toInt()
-        val aimOffsetY = ceil(settings.aimOffsetY * (Screen.HEIGHT / 1440.0)).toInt()
-
         val maxSnapX = (captureWidth / settings.maxSnapDivisor).toInt()
         val maxSnapY = (captureHeight / settings.maxSnapDivisor).toInt()
 
@@ -74,7 +70,7 @@ object Overwatcheat {
             settings.aimDurationMillis,
             settings.aimJitterPercent,
             captureCenterX, captureCenterY,
-            aimOffsetX, aimOffsetY,
+            settings.aimOffsetX, settings.aimOffsetY,
             maxSnapX, maxSnapY,
             settings.deviceId
         )

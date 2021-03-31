@@ -21,6 +21,7 @@ package com.overwatcheat.aimbot
 import com.overwatcheat.FastRandom
 import com.overwatcheat.Keyboard
 import com.overwatcheat.Mouse
+import kotlin.math.abs
 import kotlin.system.measureTimeMillis
 
 class AimBotThread(
@@ -29,7 +30,7 @@ class AimBotThread(
     val aimDurationMillis: Long,
     val aimJitterPercent: Int,
     val captureCenterX: Int, val captureCenterY: Int,
-    val aimOffsetX: Int, val aimOffsetY: Int,
+    val aimOffsetX: Float, val aimOffsetY: Float,
     val maxSnapX: Int, val maxSnapY: Int,
     val deviceID: Int
 ) : Thread("Aim Bot") {
@@ -51,20 +52,18 @@ class AimBotThread(
                 val yLow = (colorCoord ushr 16) and 0xFFFF
                 val yHigh = colorCoord and 0xFFFF
 
-                val cx = (xLow + ((xHigh - xLow) / 2)).toInt()
-                val cy = (yLow + ((yHigh - yLow) / 2 * 0.81)).toInt()
+                val aimX = (xLow + ((xHigh - xLow) / 2 * aimOffsetX)).toInt()
+                val aimY = (yLow + ((yHigh - yLow) / 2 * aimOffsetY)).toInt()
 
-                val dx = cx - captureCenterX
-                val dy = cy - captureCenterY
+                val dX = aimX - captureCenterX
+                val dY = aimY - captureCenterY
 
-                //println("$cx,$cy and $dx,$dy cuz $captureCenterX,$captureCenterY x($xLow,$xHigh) y($yLow,$yHigh)")
+                if (abs(dX) > maxSnapX || abs(dY) > maxSnapY) return@measureTimeMillis
 
-                val randomSensitivityMultiplier = 1F//1F - (random[aimJitterPercent] / 100F)
-                val dxP = dx / 10F
-                val dyP = dy / 10F
+                //val randomSensitivityMultiplier = 1F - (random[aimJitterPercent] / 100F)
                 Mouse.move(
-                    /*if (dxP > 0 && dxP < 1) 1 else if (dxP < 0 && dxP > -1) -1 else */dxP.toInt(),
-                    /*if (dyP > 0 && dyP < 1) 1 else if (dyP < 0 && dyP > -1) -1 else */dyP.toInt(),
+                    (dX / sensitivity/* * randomSensitivityMultiplier*/).toInt(),
+                    (dY / sensitivity/* * randomSensitivityMultiplier*/).toInt(),
                     deviceID
                 )
             }

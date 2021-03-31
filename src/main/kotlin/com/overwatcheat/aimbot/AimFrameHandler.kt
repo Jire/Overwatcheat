@@ -29,8 +29,6 @@ class AimFrameHandler(val colorMatcher: AimColorMatcher) : FrameHandler {
         val frameHeight = frame.imageHeight
         val data = frame.image[0] as ByteBuffer
 
-        //var highestX = -1
-        //var yCount = 0
         var found = false
         var xHigh = Int.MIN_VALUE
         var xLow = Int.MAX_VALUE
@@ -40,8 +38,8 @@ class AimFrameHandler(val colorMatcher: AimColorMatcher) : FrameHandler {
             for (y in 0..frameHeight - 1) {
                 val dataIndexBase = frameWidth * y * 3
                 val dataIndex = dataIndexBase + (x * 3)
-                val colorCoord = colorCoord(data, dataIndex, x, y)
-                if (colorCoord == 0L) continue
+                if (!colorMatches(data, dataIndex)) continue
+
                 found = true
                 if (x > xHigh) xHigh = x
                 if (x < xLow) xLow = x
@@ -50,21 +48,22 @@ class AimFrameHandler(val colorMatcher: AimColorMatcher) : FrameHandler {
             }
         }
 
-        AimBotState.aimData = if (found)
-            (xLow.toLong() shl 48) or (xHigh.toLong() shl 32) or (yLow.toLong() shl 16) or yHigh.toLong()
-        else 0
+        AimBotState.aimData =
+            if (found && xHigh != Int.MIN_VALUE && xLow != Int.MAX_VALUE && yHigh != Int.MIN_VALUE && yLow != Int.MAX_VALUE)
+                (xLow.toLong() shl 48) or
+                        (xHigh.toLong() shl 32) or
+                        (yLow.toLong() shl 16) or
+                        yHigh.toLong()
+            else 0
     }
 
-    private fun colorCoord(data: ByteBuffer, dataIndex: Int, x: Int, y: Int): Long {
+    private fun pixelRGB(data: ByteBuffer, dataIndex: Int): Int {
         val blue = data[dataIndex].toInt() and 0xFF
         val green = data[dataIndex + 1].toInt() and 0xFF
         val red = data[dataIndex + 2].toInt() and 0xFF
-
-        val rgb = (red shl 16) or (green shl 8) or blue
-
-        return if (colorMatcher.colorMatches(rgb))
-            ((x and 0xFFFF).toLong() shl 32) or ((y and 0xFFFF).toLong() shl 16)
-        else 0
+        return (red shl 16) or (green shl 8) or blue
     }
+
+    private fun colorMatches(data: ByteBuffer, dataIndex: Int) = colorMatcher.colorMatches(pixelRGB(data, dataIndex))
 
 }
