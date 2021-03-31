@@ -41,27 +41,34 @@ class AimBotThread(
         while (!interrupted()) {
             val elapsed = measureTimeMillis {
                 if (!Keyboard.keyPressed(aimKey)) {
-                    AimBotState.colorCoord = 0
+                    AimBotState.aimData = 0
                     return@measureTimeMillis
                 }
 
-                val colorCoord = AimBotState.colorCoord
+                val colorCoord = AimBotState.aimData
                 if (colorCoord == 0L) return@measureTimeMillis
+//size=127, 56,66
+                val size = colorCoord and 0xFFFF
+                if (size < 20 || size > 220) return@measureTimeMillis
+                val scale = if (size < 20 || size > 220) 1F else size / 110.0F
+                //size=109, 56, 36
+//size=110, 53,53
+                val colorX = (colorCoord ushr 32).toInt() and 0xFFFF
+                val deltaX = min(maxSnapX, colorX - captureCenterX + (aimOffsetX * scale).toInt())
 
-                val colorX = (colorCoord ushr 32).toInt()
-                val deltaX = min(maxSnapX, colorX - captureCenterX + aimOffsetX)
+                val colorY = (colorCoord ushr 16).toInt() and 0xFFFF
+                val deltaY = min(maxSnapY, colorY - captureCenterY + (aimOffsetY * scale).toInt())
 
-                val colorY = colorCoord.toInt()
-                val deltaY = min(maxSnapY, colorY - captureCenterY + aimOffsetY)
+                //println("($colorX,$colorY) size=$size scale=$scale")
 
-                val randomSensitivityMultiplier = 1F - (random[aimJitterPercent] / 100F)
+                val randomSensitivityMultiplier = 1F//1F - (random[aimJitterPercent] / 100F)
                 Mouse.move(
                     (deltaX / sensitivity * randomSensitivityMultiplier).toInt(),
                     (deltaY / sensitivity * randomSensitivityMultiplier).toInt(),
                     deviceID
                 )
             }
-            val sleepTime = aimDurationMillis - elapsed
+            val sleepTime = aimDurationMillis/* + random[2]*/ - elapsed
             if (sleepTime > 0) {
                 sleep(sleepTime)
             }

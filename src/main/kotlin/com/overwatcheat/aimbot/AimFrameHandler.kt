@@ -29,26 +29,42 @@ class AimFrameHandler(val colorMatcher: AimColorMatcher) : FrameHandler {
         val frameHeight = frame.imageHeight
         val data = frame.image[0] as ByteBuffer
 
+        var startColorCoord = 0L
+        var highestX = -1
+        var yCount = 0
         for (y in 0..frameHeight - 1) {
             val dataIndexBase = frameWidth * y * 3
+            if (startColorCoord != 0L && ++yCount >= 10) break
             for (x in 0..frameWidth - 1) {
                 val dataIndex = dataIndexBase + (x * 3)
-                if (usedDataIndex(data, dataIndex, x, y)) return
+                val colorCoord = colorCoord(data, dataIndex, x, y)
+                if (colorCoord == 0L) continue
+                if (startColorCoord == 0L) startColorCoord = colorCoord
+                if (x > highestX) highestX = x
             }
         }
-        AimBotState.colorCoord = 0
+
+
+        if (startColorCoord == 0L/* || size == 0*/) {
+            AimBotState.aimData = 0
+        } else {
+            val startX = (startColorCoord ushr 32).toInt() and 0xFFFF
+            val size = if (highestX != -1) (highestX - startX) and 0xFFFF else 0
+            AimBotState.aimData = startColorCoord or size.toLong()
+            //println("$size vs $startX vs $highestX")
+        }
     }
 
-    private fun usedDataIndex(data: ByteBuffer, dataIndex: Int, x: Int, y: Int): Boolean {
+    private fun colorCoord(data: ByteBuffer, dataIndex: Int, x: Int, y: Int): Long {
         val blue = data[dataIndex].toInt() and 0xFF
         val green = data[dataIndex + 1].toInt() and 0xFF
         val red = data[dataIndex + 2].toInt() and 0xFF
 
         val rgb = (red shl 16) or (green shl 8) or blue
-        if (!colorMatcher.colorMatches(rgb)) return false
 
-        AimBotState.colorCoord = (x.toLong() shl 32) or y.toLong()
-        return true
+        return if (colorMatcher.colorMatches(rgb))
+            ((x and 0xFFFF).toLong() shl 32) or ((y and 0xFFFF).toLong() shl 16)
+        else 0
     }
 
 }

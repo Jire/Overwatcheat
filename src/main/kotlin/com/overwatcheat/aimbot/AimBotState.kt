@@ -21,6 +21,6 @@ package com.overwatcheat.aimbot
 object AimBotState {
 
     @Volatile
-    var colorCoord = 0L
+    var aimData = 0L
 
 }
