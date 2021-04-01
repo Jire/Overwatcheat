@@ -44,7 +44,7 @@ script.
 
 **Installation & Usage Guide**
 
-[![Beginner's Video](http://i.imgur.com/liZFwOI.png)](https://www.youtube.com/watch?v=oJGQbK6iYLM "Overwatcheat")
+[![Installation & Usage Guide](https://i.imgur.com/p6qyqkT.png)](https://www.youtube.com/watch?v=oJGQbK6iYLM "Overwatcheat")
 
 ---
 
