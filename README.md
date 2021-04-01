@@ -42,9 +42,9 @@ script.
 
 ---
 
-**Beginner's Guide Video**
+**Installation & Usage Guide**
 
-[![Beginner's Video](http://i.imgur.com/liZFwOI.png)](https://www.youtube.com/watch?v=PcSO_L9yMGw "Overwatcheat")
+[![Beginner's Video](http://i.imgur.com/liZFwOI.png)](https://www.youtube.com/watch?v=oJGQbK6iYLM "Overwatcheat")
 
 ---
 
