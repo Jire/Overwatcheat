@@ -46,7 +46,7 @@ class AimBotThread(
                 }
                 useAimData(AimBotState.aimData)
             }
-            val sleepTime = aimDurationMillis + random[1] - elapsed
+            val sleepTime = aimDurationMillis - elapsed
             if (sleepTime > 0) {
                 sleep(sleepTime)
             }
