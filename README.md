@@ -28,9 +28,9 @@ The first step is to compile the source code into a usable cheat program.
 * Double click on the "_build_" (_build.bat_) script and wait for it to complete
 
 Once those steps are complete, the usable cheat program can be found within the _build_
-directory, and will in a directory called **Overwatcheat 3.3.0**.
+directory, and will in a directory called **Overwatcheat 3.4.0**.
 
-From within the **Overwatcheat 3.3.0** directory, you can start the cheat by running the _"Start Overwatcheat 3.3.0"_
+From within the **Overwatcheat 3.4.0** directory, you can start the cheat by running the _"Start Overwatcheat 3.4.0"_
 script.
 
 **Requirements:**

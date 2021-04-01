@@ -26,6 +26,7 @@ import com.overwatcheat.aimbot.AimFrameHandler
 import com.overwatcheat.framegrab.FrameGrabber
 import com.overwatcheat.framegrab.FrameGrabberThread
 import com.overwatcheat.framegrab.FrameHandler
+import com.overwatcheat.overlay.OverlayManager
 
 object Overwatcheat {
 
@@ -77,6 +78,10 @@ object Overwatcheat {
 
         frameGrabberThread.start()
         aimBotThread.start()
+
+        if (settings.enableOverlay) {
+            OverlayManager.open(settings, captureOffsetX, captureOffsetY)
+        }
     }
 
 }

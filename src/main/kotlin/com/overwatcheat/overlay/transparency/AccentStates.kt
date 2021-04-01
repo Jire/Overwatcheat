@@ -16,20 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat
+package com.overwatcheat.overlay.transparency
 
-import java.awt.Dimension
-import java.awt.Toolkit
+enum class AccentStates {
+    ACCENT_DISABLED,
+    ACCENT_ENABLE_GRADIENT,
+    ACCENT_ENABLE_TRANSPARENTGRADIENT,
+    ACCENT_ENABLE_BLURBEHIND,
+    ACCENT_ENABLE_ACRYLIC,
+    ACCENT_INVALID_STATE;
 
-object Screen {
-
-    private val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
-
-    val WIDTH = DIMENSION.width
-    val HEIGHT = DIMENSION.height
-
-    const val OVERLAY_OFFSET = 1
-    val OVERLAY_WIDTH = WIDTH - OVERLAY_OFFSET
-    val OVERLAY_HEIGHT = HEIGHT - OVERLAY_OFFSET
-
+    companion object :
+        EnumLookUpWithDefault<AccentStates>(values().associateBy(AccentStates::ordinal), ACCENT_INVALID_STATE)
 }

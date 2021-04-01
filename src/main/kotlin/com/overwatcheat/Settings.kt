@@ -27,7 +27,8 @@ class Settings(
     val targetColors: IntArray, val targetColorTolerance: Int,
     val windowTitleSearch: String,
     val deviceId: Int,
-    val aimOffsetX: Float, val aimOffsetY: Float
+    val aimOffsetX: Float, val aimOffsetY: Float,
+    val enableOverlay: Boolean
 ) {
 
     companion object {
@@ -55,8 +56,10 @@ class Settings(
 
             var deviceId = 11
 
-            var aimOffsetX = 1.04F
-            var aimOffsetY = 0.76F
+            var aimOffsetX = 1.00F
+            var aimOffsetY = 0.75F
+
+            var enableOverlay = true
 
             file.readLines().forEach {
                 if (it.contains("=")) {
@@ -77,6 +80,7 @@ class Settings(
                         "device_id" -> deviceId = split[1].toInt()
                         "aim_offset_x" -> aimOffsetX = split[1].toFloat()
                         "aim_offset_y" -> aimOffsetY = split[1].toFloat()
+                        "enable_overlay" -> enableOverlay = split[1].toBoolean()
                     }
                 }
             }
@@ -94,7 +98,8 @@ class Settings(
                 targetColorTolerance,
                 windowTitleSearch,
                 deviceId,
-                aimOffsetX, aimOffsetY
+                aimOffsetX, aimOffsetY,
+                enableOverlay
             )
         }
     }

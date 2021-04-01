@@ -16,20 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat
+package com.overwatcheat.overlay.transparency
 
-import java.awt.Dimension
-import java.awt.Toolkit
+import com.sun.jna.Structure
 
-object Screen {
+@Structure.FieldOrder(value = ["dwFlags", "fEnable", "hRgnBlur", "fTransitionOnMaximized"])
+class DWM_BLURBEHIND : Structure() {
 
-    private val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
+    @JvmField
+    var dwFlags: Long? = null
 
-    val WIDTH = DIMENSION.width
-    val HEIGHT = DIMENSION.height
+    @JvmField
+    var fEnable = false
 
-    const val OVERLAY_OFFSET = 1
-    val OVERLAY_WIDTH = WIDTH - OVERLAY_OFFSET
-    val OVERLAY_HEIGHT = HEIGHT - OVERLAY_OFFSET
+    @JvmField
+    var hRgnBlur: Long? = null
+
+    @JvmField
+    var fTransitionOnMaximized = false
 
 }

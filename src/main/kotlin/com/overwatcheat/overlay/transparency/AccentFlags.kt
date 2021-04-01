@@ -16,20 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat
+package com.overwatcheat.overlay.transparency
 
-import java.awt.Dimension
-import java.awt.Toolkit
+object AccentFlags {
 
-object Screen {
-
-    private val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
-
-    val WIDTH = DIMENSION.width
-    val HEIGHT = DIMENSION.height
-
-    const val OVERLAY_OFFSET = 1
-    val OVERLAY_WIDTH = WIDTH - OVERLAY_OFFSET
-    val OVERLAY_HEIGHT = HEIGHT - OVERLAY_OFFSET
+    const val Transparent = 2
+    const val DrawLeftBorder = 0x20
+    const val DrawTopBorder = 0x40
+    const val DrawRightBorder = 0x80
+    const val DrawBottomBorder = 0x100
+    const val DrawAllBorders = (DrawLeftBorder or DrawTopBorder or DrawRightBorder or DrawBottomBorder)
 
 }

@@ -16,20 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat
+package com.overwatcheat.overlay.transparency
 
-import java.awt.Dimension
-import java.awt.Toolkit
+import com.sun.jna.Structure
 
-object Screen {
+@Structure.FieldOrder(value = ["AccentState", "AccentFlags", "GradientColor", "AnimationId"])
+class AccentPolicy : Structure(), Structure.ByReference {
+    @JvmField
+    internal var AccentState: Int = 0
 
-    private val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
+    var accentState
+        get() = AccentStates[AccentState]
+        set(value) {
+            AccentState = value.ordinal
+        }
 
-    val WIDTH = DIMENSION.width
-    val HEIGHT = DIMENSION.height
+    @JvmField
+    var AccentFlags: Int = 0
 
-    const val OVERLAY_OFFSET = 1
-    val OVERLAY_WIDTH = WIDTH - OVERLAY_OFFSET
-    val OVERLAY_HEIGHT = HEIGHT - OVERLAY_OFFSET
+    @JvmField
+    var GradientColor: Int = 0
 
+    @JvmField
+    var AnimationId: Int = 0
 }

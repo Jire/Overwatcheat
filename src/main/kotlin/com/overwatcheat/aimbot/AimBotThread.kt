@@ -58,12 +58,17 @@ class AimBotThread(
 
         val xLow = (aimData ushr 48) and 0xFFFF
         val xHigh = (aimData ushr 32) and 0xFFFF
+        val xSize = xHigh - xLow
+        if (xSize < 32) return
+
         val yLow = (aimData ushr 16) and 0xFFFF
         val yHigh = aimData and 0xFFFF
+        val ySize = yHigh - yLow
+        if (ySize < 32) return
 
-        val xLowOffset = (xHigh - xLow) / 2 * aimOffsetX
+        val xLowOffset = xSize / 2 * aimOffsetX
         val aimX = (xLow + xLowOffset).toInt()
-        val yLowOffset = (yHigh - yLow) / 2 * aimOffsetY
+        val yLowOffset = ySize / 2 * aimOffsetY
         val aimY = (yLow + yLowOffset).toInt()
 
         val dX = aimX - captureCenterX

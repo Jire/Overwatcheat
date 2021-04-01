@@ -16,20 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat
+package com.overwatcheat.overlay.transparency
 
-import java.awt.Dimension
-import java.awt.Toolkit
+import com.badlogic.gdx.utils.IntMap
 
-object Screen {
+open class EnumLookUpWithDefault<T>(
+    map: Map<Int, T>,
+    private val defaultValue: T
+) {
+    //to get rid of type casting
+    private val valueMap: IntMap<T> = IntMap(map.size)
 
-    private val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
+    init {
+        map.forEach { (k, v) -> valueMap.put(k, v) }
+    }
 
-    val WIDTH = DIMENSION.width
-    val HEIGHT = DIMENSION.height
-
-    const val OVERLAY_OFFSET = 1
-    val OVERLAY_WIDTH = WIDTH - OVERLAY_OFFSET
-    val OVERLAY_HEIGHT = HEIGHT - OVERLAY_OFFSET
-
+    operator fun get(id: Int) = valueMap[id] ?: defaultValue
 }

@@ -16,20 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.overwatcheat
+package com.overwatcheat.overlay.transparency
 
-import java.awt.Dimension
-import java.awt.Toolkit
+import com.sun.jna.Native
 
-object Screen {
+object DWM {
 
-    private val DIMENSION: Dimension = Toolkit.getDefaultToolkit().screenSize
+    @JvmStatic
+    external fun DwmEnableBlurBehindWindow(hWnd: Long, pBlurBehind: DWM_BLURBEHIND): Int
 
-    val WIDTH = DIMENSION.width
-    val HEIGHT = DIMENSION.height
+    init {
+        Native.register("Dwmapi")
+    }
 
-    const val OVERLAY_OFFSET = 1
-    val OVERLAY_WIDTH = WIDTH - OVERLAY_OFFSET
-    val OVERLAY_HEIGHT = HEIGHT - OVERLAY_OFFSET
+    const val DWM_BB_ENABLE = 0x00000001L
+    const val DWM_BB_BLURREGION = 0x00000002L
+    const val DWM_BB_TRANSITIONONMAXIMIZED = 0x00000004L
 
 }

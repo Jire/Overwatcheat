@@ -19,10 +19,12 @@ import java.nio.file.Files
  */
 
 group 'com.overwatcheat'
-version '3.3.0'
+version '3.4.0'
 
 buildscript {
 	ext.kotlin_version = '1.4.32'
+	ext.gdxVersion = '1.9.14'
+	ext.visuiVersion = "1.4.7"
 	
 	repositories {
 		jcenter()
@@ -52,6 +54,16 @@ dependencies {
 	implementation group: 'net.java.dev.jna', name: 'jna-platform', version: '5.7.0'
 	
 	implementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.5.2'
+	
+	
+	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+	implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+	implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+	implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+	implementation "com.kotcrab.vis:vis-ui:$visuiVersion"
 }
 
 jar {
