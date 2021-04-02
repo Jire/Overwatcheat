@@ -21,7 +21,6 @@ package com.overwatcheat.framegrab
 import com.overwatcheat.nativelib.User32
 import com.sun.jna.Native
 import com.sun.jna.Pointer
-import com.sun.jna.platform.win32.WinDef
 
 object FrameWindowFinder {
 
@@ -29,7 +28,20 @@ object FrameWindowFinder {
 
     private var windowTitle: CharSequence? = null
 
-    fun findWindowTitle(windowTitleSearch: CharSequence): CharSequence {
+    fun findWindowTitle(windowTitleSearch: String): CharSequence {
+        /* First iterate using equals */
+        User32.EnumWindows({ hwnd, _ ->
+            val windowTitleBytes = ByteArray(WINDOW_TITLE_BYTES_SIZE)
+            User32.GetWindowTextA(hwnd.pointer, windowTitleBytes, windowTitleBytes.size)
+            val windowTitle = Native.toString(windowTitleBytes).trim { it <= ' ' }
+            if (windowTitle.equals(windowTitleSearch, true)) {
+                FrameWindowFinder.windowTitle = windowTitle
+            }
+            true
+        }, Pointer.NULL)
+        if (windowTitle != null) return windowTitle!!
+
+        /* If we couldn't find that, then try using contains */
         User32.EnumWindows({ hwnd, _ ->
             val windowTitleBytes = ByteArray(WINDOW_TITLE_BYTES_SIZE)
             User32.GetWindowTextA(hwnd.pointer, windowTitleBytes, windowTitleBytes.size)
@@ -39,30 +51,8 @@ object FrameWindowFinder {
             }
             true
         }, Pointer.NULL)
-
-        if (windowTitle == null) {
-            throw Exception("Could not find window title with search: \"$windowTitleSearch\"")
-        }
+        if (windowTitle == null) throw Exception("Could not find window title with search: \"$windowTitleSearch\"")
         return windowTitle!!
-    }
-
-    private var windowHWND: WinDef.HWND? = null
-
-    fun findWindowHWND(windowTitleSearch: CharSequence): WinDef.HWND {
-        User32.EnumWindows({ windowHWND, _ ->
-            val windowTitleBytes = ByteArray(WINDOW_TITLE_BYTES_SIZE)
-            User32.GetWindowTextA(windowHWND.pointer, windowTitleBytes, windowTitleBytes.size)
-            val windowTitle = Native.toString(windowTitleBytes).trim { it <= ' ' }
-            if (windowTitle.contains(windowTitleSearch)) {
-                FrameWindowFinder.windowHWND = windowHWND
-            }
-            true
-        }, Pointer.NULL)
-
-        if (windowHWND == null) {
-            throw Exception("Could not find window HWND with search: \"$windowTitleSearch\"")
-        }
-        return windowHWND!!
     }
 
 }
