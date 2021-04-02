@@ -21,7 +21,7 @@ package com.overwatcheat.framegrab
 import org.bytedeco.javacv.FFmpegFrameGrabber
 
 class FrameGrabber(
-    windowTitleSearch: CharSequence,
+    windowTitleSearch: String,
     frameRate: Double,
     imageWidth: Int,
     imageHeight: Int,
