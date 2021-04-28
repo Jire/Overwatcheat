@@ -18,7 +18,7 @@
 
 package com.overwatcheat.settings
 
-abstract class ConfiguredSetting(override val name: String) : Setting {
+abstract class ConfiguredSetting(final override val name: String) : Setting {
 
     protected fun mapNameToThis() {
         Settings.nameToSetting[name] = this

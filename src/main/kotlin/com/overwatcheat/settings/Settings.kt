@@ -22,6 +22,8 @@ import java.io.File
 
 object Settings {
 
+    internal val nameToSetting: MutableMap<String, Setting> = HashMap()
+
     val aimKey by IntSetting("aim_key", 1)
     val sensitivity by FloatSetting("sensitivity", 15.0F)
     val fps by DoubleSetting("fps", 60.0)
@@ -42,8 +44,6 @@ object Settings {
     val aimOffsetX by FloatSetting("aim_offset_x", 1.00F)
     val aimOffsetY by FloatSetting("aim_offset_y", 0.75F)
     val enableOverlay by BooleanSetting("enable_overlay", false)
-
-    internal val nameToSetting: MutableMap<String, Setting> = HashMap()
 
     const val DEFAULT_FILE = "overwatcheat.cfg"
 
