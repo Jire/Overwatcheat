@@ -19,11 +19,11 @@ import java.nio.file.Files
  */
 
 group 'com.overwatcheat'
-version '3.4.1'
+version '3.5.0'
 
 buildscript {
 	ext.kotlin_version = '1.4.32'
-	ext.gdxVersion = '1.9.14'
+	ext.gdxVersion = '1.10.0'
 	ext.visuiVersion = "1.4.7"
 	
 	repositories {
@@ -50,11 +50,10 @@ dependencies {
 	
 	implementation group: 'org.bytedeco', name: 'javacv-platform', version: '1.5.5'
 	
-	implementation group: 'net.java.dev.jna', name: 'jna', version: '5.7.0'
-	implementation group: 'net.java.dev.jna', name: 'jna-platform', version: '5.7.0'
+	implementation group: 'net.java.dev.jna', name: 'jna', version: '5.8.0'
+	implementation group: 'net.java.dev.jna', name: 'jna-platform', version: '5.8.0'
 	
-	implementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.5.2'
-	
+	implementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.5.4'
 	
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 	implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
