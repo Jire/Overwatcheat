@@ -21,7 +21,7 @@ package com.overwatcheat.aimbot
 import com.overwatcheat.FastRandom
 import com.overwatcheat.Keyboard
 import com.overwatcheat.Mouse
-import com.overwatcheat.Settings
+import com.overwatcheat.settings.Settings
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 import kotlin.math.max
@@ -29,12 +29,11 @@ import kotlin.math.min
 import kotlin.system.measureNanoTime
 
 class AimBotThread(
-    val settings: Settings,
     val captureCenterX: Int, val captureCenterY: Int,
     val maxSnapX: Int, val maxSnapY: Int,
 ) : Thread("Aim Bot") {
 
-    val aimDurationNanos = (settings.aimDurationMillis * 1_000_000)
+    val aimDurationNanos = (Settings.aimDurationMillis * 1_000_000)
 
     val random = FastRandom()
 
@@ -42,15 +41,15 @@ class AimBotThread(
         val tlr = ThreadLocalRandom.current()
         while (!interrupted()) {
             val elapsed = measureNanoTime {
-                if (!Keyboard.keyPressed(settings.aimKey)) {
+                if (!Keyboard.keyPressed(Settings.aimKey)) {
                     AimBotState.aimData = 0
                     return@measureNanoTime
                 }
                 useAimData(AimBotState.aimData)
             }
             val sleepTimeMultiplier = max(
-                settings.aimDurationMultiplierMax,
-                (settings.aimDurationMultiplierBase + tlr.nextFloat())
+                Settings.aimDurationMultiplierMax,
+                (Settings.aimDurationMultiplierBase + tlr.nextFloat())
             )
             val sleepTime = (aimDurationNanos * sleepTimeMultiplier).toLong() - elapsed
             if (sleepTime > 0) {
@@ -66,11 +65,11 @@ class AimBotThread(
 
         val dX = calculateDelta(
             aimData, 48,
-            settings.aimMinTargetWidth, settings.aimOffsetX, captureCenterX
+            Settings.aimMinTargetWidth, Settings.aimOffsetX, captureCenterX
         )
         val dY = calculateDelta(
             aimData, 16,
-            settings.aimMinTargetHeight, settings.aimOffsetY, captureCenterY
+            Settings.aimMinTargetHeight, Settings.aimOffsetY, captureCenterY
         )
         performAim(dX, dY)
     }
@@ -100,13 +99,13 @@ class AimBotThread(
     private fun performAim(dX: Int, dY: Int) {
         if (abs(dX) > maxSnapX || abs(dY) > maxSnapY) return
 
-        val randomSensitivityMultiplier = 1F - (random[settings.aimJitterPercent] / 100F)
-        val moveX = (dX / settings.sensitivity * randomSensitivityMultiplier).toInt()
-        val moveY = (dY / settings.sensitivity * randomSensitivityMultiplier).toInt()
+        val randomSensitivityMultiplier = 1F - (random[Settings.aimJitterPercent] / 100F)
+        val moveX = (dX / Settings.sensitivity * randomSensitivityMultiplier).toInt()
+        val moveY = (dY / Settings.sensitivity * randomSensitivityMultiplier).toInt()
         Mouse.move(
-            min(settings.aimMaxMovePixels, moveX),
-            min(settings.aimMaxMovePixels, moveY),
-            settings.deviceId
+            min(Settings.aimMaxMovePixels, moveX),
+            min(Settings.aimMaxMovePixels, moveY),
+            Settings.deviceId
         )
     }
 

@@ -27,15 +27,16 @@ import com.overwatcheat.framegrab.FrameGrabber
 import com.overwatcheat.framegrab.FrameGrabberThread
 import com.overwatcheat.framegrab.FrameHandler
 import com.overwatcheat.overlay.OverlayManager
+import com.overwatcheat.settings.Settings
 
 object Overwatcheat {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val settings = Settings.read()
+        Settings.read()
 
-        val captureWidth = settings.boxWidth
-        val captureHeight = settings.boxHeight
+        val captureWidth = Settings.boxWidth
+        val captureHeight = Settings.boxHeight
 
         val captureOffsetX = (Screen.WIDTH - captureWidth) / 2
         val captureOffsetY = (Screen.HEIGHT - captureHeight) / 2
@@ -43,17 +44,14 @@ object Overwatcheat {
         val captureCenterX = captureWidth / 2
         val captureCenterY = captureHeight / 2
 
-        val aimColorMatcher = AimColorMatcher(
-            settings.targetColorTolerance,
-            *settings.targetColors
-        )
+        val aimColorMatcher = AimColorMatcher()
         aimColorMatcher.initializeMatchSet()
 
         val frameHandler: FrameHandler = AimFrameHandler(aimColorMatcher)
 
         val frameGrabber = FrameGrabber(
-            settings.windowTitleSearch,
-            settings.fps,
+            Settings.windowTitleSearch,
+            Settings.fps,
             captureWidth,
             captureHeight,
             captureOffsetX,
@@ -62,10 +60,10 @@ object Overwatcheat {
 
         val frameGrabberThread = FrameGrabberThread(frameGrabber, frameHandler)
 
-        val maxSnapX = (captureWidth / settings.maxSnapDivisor).toInt()
-        val maxSnapY = (captureHeight / settings.maxSnapDivisor).toInt()
+        val maxSnapX = (captureWidth / Settings.maxSnapDivisor).toInt()
+        val maxSnapY = (captureHeight / Settings.maxSnapDivisor).toInt()
 
-        val aimBotThread = AimBotThread(settings,
+        val aimBotThread = AimBotThread(
             captureCenterX, captureCenterY,
             maxSnapX, maxSnapY
         )
@@ -73,8 +71,8 @@ object Overwatcheat {
         frameGrabberThread.start()
         aimBotThread.start()
 
-        if (settings.enableOverlay) {
-            OverlayManager.open(settings, captureOffsetX, captureOffsetY)
+        if (Settings.enableOverlay) {
+            OverlayManager.open(captureOffsetX, captureOffsetY)
         }
     }
 

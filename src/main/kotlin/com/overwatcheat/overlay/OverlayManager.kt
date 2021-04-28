@@ -21,11 +21,11 @@ package com.overwatcheat.overlay
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import com.overwatcheat.Screen
-import com.overwatcheat.Settings
 import com.overwatcheat.nativelib.User32
 import com.overwatcheat.overlay.transparency.AccentFlags
 import com.overwatcheat.overlay.transparency.AccentStates
 import com.overwatcheat.overlay.transparency.WindowCompositionAttributeData
+import com.overwatcheat.settings.Settings
 import com.sun.jna.platform.win32.WinUser
 import org.lwjgl.glfw.GLFW
 import java.util.concurrent.ThreadLocalRandom
@@ -41,7 +41,7 @@ object OverlayManager {
     @Volatile
     var myHWND = -1L
 
-    fun open(settings: Settings, captureOffsetX: Int, captureOffsetY: Int) {
+    fun open(captureOffsetX: Int, captureOffsetY: Int) {
         val title = ThreadLocalRandom.current().nextLong().toString()
         val overlay = Overlay(title, captureOffsetX, captureOffsetY)
         val config = Lwjgl3ApplicationConfiguration().apply {
@@ -56,7 +56,7 @@ object OverlayManager {
             GLFW.glfwWindowHint(GLFW.GLFW_DOUBLEBUFFER, GLFW.GLFW_TRUE)
             setBackBufferConfig(8, 8, 8, 8, 16, 0, 4) // samples 4
 
-            val fps = settings.fps.toInt()
+            val fps = Settings.fps.toInt()
             setForegroundFPS(fps)
             setIdleFPS(min(30, fps))
         }

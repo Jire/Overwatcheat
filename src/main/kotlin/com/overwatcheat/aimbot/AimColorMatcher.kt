@@ -18,19 +18,17 @@
 
 package com.overwatcheat.aimbot
 
+import com.overwatcheat.settings.Settings
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import it.unimi.dsi.fastutil.ints.IntSet
 
-class AimColorMatcher(
-    val targetColorTolerance: Int,
-    vararg val targetColors: Int
-) {
+class AimColorMatcher {
 
     val matchSet: IntSet = IntOpenHashSet()
 
     fun initializeMatchSet() {
-        val toleranceRange = -targetColorTolerance..targetColorTolerance
-        for (rgb in targetColors) {
+        val toleranceRange = -Settings.targetColorTolerance..Settings.targetColorTolerance
+        for (rgb in Settings.targetColors) {
             val baseR = (rgb and 0xFF_00_00) ushr 16
             val baseG = (rgb and 0x00_FF_00) ushr 8
             val baseB = rgb and 0x00_00_FF
