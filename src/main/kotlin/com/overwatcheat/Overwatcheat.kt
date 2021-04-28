@@ -65,15 +65,9 @@ object Overwatcheat {
         val maxSnapX = (captureWidth / settings.maxSnapDivisor).toInt()
         val maxSnapY = (captureHeight / settings.maxSnapDivisor).toInt()
 
-        val aimBotThread = AimBotThread(
-            settings.aimKey,
-            settings.sensitivity,
-            settings.aimDurationMillis,
-            settings.aimJitterPercent,
+        val aimBotThread = AimBotThread(settings,
             captureCenterX, captureCenterY,
-            settings.aimOffsetX, settings.aimOffsetY,
-            maxSnapX, maxSnapY,
-            settings.deviceId
+            maxSnapX, maxSnapY
         )
 
         frameGrabberThread.start()

@@ -21,34 +21,42 @@ package com.overwatcheat.aimbot
 import com.overwatcheat.FastRandom
 import com.overwatcheat.Keyboard
 import com.overwatcheat.Mouse
+import com.overwatcheat.Settings
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
-import kotlin.system.measureTimeMillis
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.system.measureNanoTime
 
 class AimBotThread(
-    val aimKey: Int,
-    val sensitivity: Float,
-    val aimDurationMillis: Long,
-    val aimJitterPercent: Int,
+    val settings: Settings,
     val captureCenterX: Int, val captureCenterY: Int,
-    val aimOffsetX: Float, val aimOffsetY: Float,
     val maxSnapX: Int, val maxSnapY: Int,
-    val deviceID: Int
 ) : Thread("Aim Bot") {
+
+    val aimDurationNanos = (settings.aimDurationMillis * 1_000_000)
 
     val random = FastRandom()
 
     override fun run() {
+        val tlr = ThreadLocalRandom.current()
         while (!interrupted()) {
-            val elapsed = measureTimeMillis {
-                if (!Keyboard.keyPressed(aimKey)) {
+            val elapsed = measureNanoTime {
+                if (!Keyboard.keyPressed(settings.aimKey)) {
                     AimBotState.aimData = 0
-                    return@measureTimeMillis
+                    return@measureNanoTime
                 }
                 useAimData(AimBotState.aimData)
             }
-            val sleepTime = aimDurationMillis - elapsed
+            val sleepTimeMultiplier = max(
+                settings.aimDurationMultiplierMax,
+                (settings.aimDurationMultiplierBase + tlr.nextFloat())
+            )
+            val sleepTime = (aimDurationNanos * sleepTimeMultiplier).toLong() - elapsed
             if (sleepTime > 0) {
-                sleep(sleepTime)
+                val millis = sleepTime / 1_000_000
+                val nanos = sleepTime % 1_000_000
+                sleep(millis, nanos.toInt())
             }
         }
     }
@@ -56,31 +64,49 @@ class AimBotThread(
     private fun useAimData(aimData: Long) {
         if (aimData == 0L) return
 
-        val xLow = (aimData ushr 48) and 0xFFFF
-        val xHigh = (aimData ushr 32) and 0xFFFF
-        val xSize = xHigh - xLow
-        if (xSize < 32) return
+        val dX = calculateDelta(
+            aimData, 48,
+            settings.aimMinTargetWidth, settings.aimOffsetX, captureCenterX
+        )
+        val dY = calculateDelta(
+            aimData, 16,
+            settings.aimMinTargetHeight, settings.aimOffsetY, captureCenterY
+        )
+        performAim(dX, dY)
+    }
 
-        val yLow = (aimData ushr 16) and 0xFFFF
-        val yHigh = aimData and 0xFFFF
-        val ySize = yHigh - yLow
-        if (ySize < 32) return
+    private fun extractAimData(aimData: Long, shiftBits: Int) = (aimData ushr shiftBits) and 0xFFFF
+    private fun calculateOffset(size: Long, offset: Float) = size / 2 * offset
+    private fun calculateAim(base: Long, offset: Float) = (base + offset).toInt()
 
-        val xLowOffset = xSize / 2 * aimOffsetX
-        val aimX = (xLow + xLowOffset).toInt()
-        val yLowOffset = ySize / 2 * aimOffsetY
-        val aimY = (yLow + yLowOffset).toInt()
+    private fun calculateDelta(
+        aimData: Long,
+        shiftBitsBase: Int,
+        minimumSize: Int,
+        offset: Float,
+        deltaSubtrahend: Int
+    ): Int {
+        val low = extractAimData(aimData, shiftBitsBase)
+        val high = extractAimData(aimData, shiftBitsBase - 16)
+        val size = high - low
+        if (size < minimumSize) return Int.MAX_VALUE
 
-        val dX = aimX - captureCenterX
-        val dY = aimY - captureCenterY
+        val deltaOffset = calculateOffset(size, offset)
+        val aimX = calculateAim(low, deltaOffset)
 
+        return aimX - deltaSubtrahend
+    }
+
+    private fun performAim(dX: Int, dY: Int) {
         if (abs(dX) > maxSnapX || abs(dY) > maxSnapY) return
 
-        val randomSensitivityMultiplier = 1F - (random[aimJitterPercent] / 100F)
+        val randomSensitivityMultiplier = 1F - (random[settings.aimJitterPercent] / 100F)
+        val moveX = (dX / settings.sensitivity * randomSensitivityMultiplier).toInt()
+        val moveY = (dY / settings.sensitivity * randomSensitivityMultiplier).toInt()
         Mouse.move(
-            (dX / sensitivity * randomSensitivityMultiplier).toInt(),
-            (dY / sensitivity * randomSensitivityMultiplier).toInt(),
-            deviceID
+            min(settings.aimMaxMovePixels, moveX),
+            min(settings.aimMaxMovePixels, moveY),
+            settings.deviceId
         )
     }
 

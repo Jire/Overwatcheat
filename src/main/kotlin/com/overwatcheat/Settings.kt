@@ -21,7 +21,12 @@ package com.overwatcheat
 import java.io.File
 
 class Settings(
-    val aimKey: Int, val sensitivity: Float, val fps: Double, val aimDurationMillis: Long, val aimJitterPercent: Int,
+    val aimKey: Int, val sensitivity: Float, val fps: Double,
+    val aimDurationMillis: Long,
+    val aimDurationMultiplierBase: Float, val aimDurationMultiplierMax: Float,
+    val aimMaxMovePixels: Int,
+    val aimJitterPercent: Int,
+    val aimMinTargetWidth: Int, val aimMinTargetHeight: Int,
     val boxWidth: Int, val boxHeight: Int,
     val maxSnapDivisor: Float,
     val targetColors: IntArray, val targetColorTolerance: Int,
@@ -41,16 +46,22 @@ class Settings(
             var aimKey = 1
             var sensitivity = 15.0F
             var fps = 60.0
-            var aimJitterPercent = 50
-            var aimDurationMillis = (1000L / fps).toLong() + 1L // 17 if fps is 60
 
-            var boxWidth = 180
-            var boxHeight = 180
+            var aimDurationMillis = 3L
+            var aimDurationMultiplierBase = 1F
+            var aimDurationMultiplierMax = 2F
+            var aimMaxMovePixels = 3
+            var aimJitterPercent = 50
+            var aimMinTargetWidth = 8
+            var aimMinTargetHeight = aimMinTargetWidth
+
+            var boxWidth = 256
+            var boxHeight = 256
 
             var maxSnapDivisor = 2.0F
 
-            var targetColors = intArrayOf(0xdd32db, 0xdb33d8, 0xe23be9, 0xd619dd, 0xd200d6)
-            var targetColorTolerance = 16
+            var targetColors = intArrayOf(0xd521cd, 0xd722cf, 0xd623ce, 0xd722ce, 0xd621cd, 0xce19ca, 0xd11ccb, 0xd21dca, 0xc818cf, 0xd722cd, 0xd722ce, 0xcd19c9, 0xc617d3, 0xcb17c5, 0xda25d3, 0xce24cc, 0xd328cc, 0xdb32ef, 0xbd15c4, 0xdc5bea, 0xda59eb, 0xd959e9, 0xf444fb, 0xcf1ac9, 0xd422d4, 0xd923cd, 0xe53af2, 0xd321d3, 0xe539f3, 0xe035ed, 0xd822cc, 0xe83df5, 0xd11fd1, 0xd622d0, 0xd21dcc, 0xd429e2, 0xe537ef, 0xd923cd, 0xe136ee, 0xd321d3, 0xe63bf3, 0xd722cf, 0xe036ee, 0xd72ce6, 0xd428e1, 0xd321d3, 0xd21dcc, 0xdf34ed, 0xd822cc, 0xe434e6, 0xd43ddf, 0xde30e4, 0xbe0dbe, 0xd823d3, 0xc814c4, 0xc20ab7, 0xde1ec1, 0xca16c6, 0xc30ebe, 0xbb0fbf, 0xc510bf, 0xc10cbc, 0xd21cb6, 0xca14c5, 0xb80cd1, 0xae0ea8, 0xbf0ec3, 0xd415c1, 0xbc22b7, 0xd317c4, 0xb1179d, 0xbc0fb4, 0xcc47c7, 0xb834b5, 0xdc2cd9, 0xd727d5, 0xde30da, 0xc834c6)
+            var targetColorTolerance = 8
 
             var windowTitleSearch = "Overwatch"
 
@@ -69,7 +80,12 @@ class Settings(
                         "sensitivity" -> sensitivity = split[1].toFloat()
                         "fps" -> fps = split[1].toDouble()
                         "aim_duration_millis" -> aimDurationMillis = split[1].toLong()
+                        "aim_duration_multiplier_base" -> aimDurationMultiplierBase = split[1].toFloat()
+                        "aim_duration_multiplier_max" -> aimDurationMultiplierMax = split[1].toFloat()
+                        "aim_max_move_pixels" -> aimMaxMovePixels = split[1].toInt()
                         "aim_jitter_percent" -> aimJitterPercent = split[1].toInt()
+                        "aim_min_target_width" -> aimMinTargetWidth = split[1].toInt()
+                        "aim_min_target_height" -> aimMinTargetHeight = split[1].toInt()
                         "box_width" -> boxWidth = split[1].toInt()
                         "box_height" -> boxHeight = split[1].toInt()
                         "max_snap_divisor" -> maxSnapDivisor = split[1].toFloat()
@@ -90,7 +106,12 @@ class Settings(
                 sensitivity,
                 fps,
                 aimDurationMillis,
+                aimDurationMultiplierBase,
+                aimDurationMultiplierMax,
+                aimMaxMovePixels,
                 aimJitterPercent,
+                aimMinTargetWidth,
+                aimMinTargetHeight,
                 boxWidth,
                 boxHeight,
                 maxSnapDivisor,
