@@ -20,7 +20,7 @@ package com.overwatcheat.settings
 
 import kotlin.reflect.KProperty
 
-class IntSetting(override val name: String, var value: Int) : Setting {
+class IntSetting(name: String, var value: Int) : ConfiguredSetting(name) {
 
     override fun parse(string: String) {
         value = string.toInt()
