@@ -30,7 +30,7 @@ object Settings {
     val flickPause by IntSetting("flick_pause_duration", 300)
     val sensitivity by FloatSetting("sensitivity", 15.0F)
     val fps by DoubleSetting("fps", 60.0)
-    val aimDurationMillis by LongSetting("aim_duration_millis", 3L)
+    val aimDurationMillis by FloatSetting("aim_duration_millis", 3.5F)
     val aimDurationMultiplierBase by FloatSetting("aim_duration_multiplier_base", 1.0F)
     val aimDurationMultiplierMax by FloatSetting("aim_duration_multiplier_max", 2.0F)
     val aimMaxMovePixels by IntSetting("aim_max_move_pixels", 3)
