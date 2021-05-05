@@ -25,6 +25,9 @@ object Settings {
     internal val nameToSetting: MutableMap<String, Setting> = HashMap()
 
     val aimKey by IntSetting("aim_key", 1)
+    val aimMode by IntSetting("aim_mode", 0)
+    val flickPixels by IntSetting("flick_shoot_pixels", 5)
+    val flickPause by IntSetting("flick_pause_duration", 300)
     val sensitivity by FloatSetting("sensitivity", 15.0F)
     val fps by DoubleSetting("fps", 60.0)
     val aimDurationMillis by LongSetting("aim_duration_millis", 3L)

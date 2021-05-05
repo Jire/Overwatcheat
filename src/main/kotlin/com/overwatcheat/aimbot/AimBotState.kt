@@ -23,4 +23,7 @@ object AimBotState {
     @Volatile
     var aimData = 0L
 
+    @Volatile
+    var flicking = false
+
 }
