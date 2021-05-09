@@ -18,11 +18,8 @@ import java.nio.file.Files
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-group 'com.overwatcheat'
-version '3.5.0'
-
 buildscript {
-	ext.kotlin_version = '1.4.32'
+	ext.kotlin_version = '1.5.0'
 	ext.gdxVersion = '1.10.0'
 	ext.visuiVersion = "1.4.7"
 	
@@ -31,13 +28,19 @@ buildscript {
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-		classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
 	}
+}
+
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
 apply plugin: "com.github.johnrengelman.shadow"
+
+group 'com.overwatcheat'
+version '3.5.0'
 
 mainClassName = 'com.overwatcheat.Overwatcheat'
 
