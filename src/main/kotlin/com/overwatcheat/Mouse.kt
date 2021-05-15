@@ -65,6 +65,16 @@ object Mouse : Thread() {
         Interception.interception_send(context, deviceID, stroke, 1)
     }
 
+    fun click(deviceID: Int) {
+        stroke.x = 0
+        stroke.y = 0
+        stroke.code = InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN.toShort()
+        Interception.interception_send(context, deviceID, stroke, 1)
+        Thread.sleep(300)
+        stroke.code = InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_UP.toShort()
+        Interception.interception_send(context, deviceID, stroke, 1)
+    }
+
     init {
         Kernel32.SetPriorityClass(Kernel32.GetCurrentProcess(), Kernel32.HIGH_PRIORITY_CLASS)
         Interception.interception_set_filter(

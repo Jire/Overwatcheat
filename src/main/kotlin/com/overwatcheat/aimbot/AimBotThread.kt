@@ -44,6 +44,8 @@ class AimBotThread(
                 if (!Keyboard.keyPressed(Settings.aimKey)) {
                     AimBotState.aimData = 0
                     return@measureNanoTime
+                } else if (Settings.aimMode == 1) {
+                    AimBotState.flicking = true
                 }
                 useAimData(AimBotState.aimData)
             }
@@ -107,6 +109,12 @@ class AimBotThread(
             min(Settings.aimMaxMovePixels, moveY),
             Settings.deviceId
         )
+
+        if (AimBotState.flicking && abs(moveX) < Settings.flickPixels && abs(moveY) < Settings.flickPixels) {
+            AimBotState.flicking = false
+            Mouse.click(Settings.deviceId)
+            sleep(Settings.flickPause.toLong(), 0)
+        }
     }
 
 }
