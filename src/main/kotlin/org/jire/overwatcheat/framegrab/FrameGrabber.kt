@@ -29,7 +29,6 @@ class FrameGrabber(
     format: String = "gdigrab",
     filename: String = "title=${FrameWindowFinder.findWindowTitle(windowTitleSearch)}"
 ) : FFmpegFrameGrabber(filename) {
-
     init {
         this.frameRate = frameRate
         this.imageWidth = imageWidth
@@ -40,4 +39,15 @@ class FrameGrabber(
         setOption("offset_y", captureOffsetY.toString())
     }
 
+    /**
+     * Because javacv comment tryLoad() in the latest version,
+     * So we need to load it manually
+     *
+     * @see FFmpegFrameGrabber static block
+     */
+    companion object {
+        init {
+            tryLoad()
+        }
+    }
 }
