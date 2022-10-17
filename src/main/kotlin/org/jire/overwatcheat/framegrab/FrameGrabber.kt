@@ -27,7 +27,7 @@ class FrameGrabber(
     imageHeight: Int,
     captureOffsetX: Int, captureOffsetY: Int,
     format: String = "gdigrab",
-    filename: String = "title=${FrameWindowFinder.findWindowTitle(windowTitleSearch)}"
+    filename: String = convertWindowName(windowTitleSearch)
 ) : FFmpegFrameGrabber(filename) {
     init {
         this.frameRate = frameRate
@@ -51,3 +51,9 @@ class FrameGrabber(
         }
     }
 }
+const val DESKTOP = "desktop"
+fun convertWindowName(windowTitle: String): String =
+    if (DESKTOP == windowTitle)
+        DESKTOP
+    else
+        "title=${FrameWindowFinder.findWindowTitle(windowTitle)}"
