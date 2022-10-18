@@ -45,7 +45,7 @@ fun TaskContainerScope.configureShadowJar() {
     shadowJar {
         archiveBaseName.set("Overwatcheat")
         archiveClassifier.set("")
-        archiveVersion.set("")
+        archiveVersion.set("${project.version}")
 
         isZip64 = true
     }
@@ -59,6 +59,7 @@ fun TaskContainerScope.configureShadowJar() {
 
 fun TaskContainerScope.configureOverwatcheat() {
     register("overwatcheat") {
+        dependsOn(shadowJar)
         doLast {
             val version = version
             val name = "Overwatcheat $version"
