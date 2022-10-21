@@ -27,9 +27,8 @@ class FrameGrabber(
     imageHeight: Int,
     captureOffsetX: Int, captureOffsetY: Int,
     format: String = "gdigrab",
-    filename: String = "title=${FrameWindowFinder.findWindowTitle(windowTitleSearch)}"
+    filename: String = convertWindowName(windowTitleSearch)
 ) : FFmpegFrameGrabber(filename) {
-
     init {
         this.frameRate = frameRate
         this.imageWidth = imageWidth
@@ -40,4 +39,21 @@ class FrameGrabber(
         setOption("offset_y", captureOffsetY.toString())
     }
 
+    /**
+     * Because javacv comment tryLoad() in the latest version,
+     * So we need to load it manually
+     *
+     * @see FFmpegFrameGrabber static block
+     */
+    companion object {
+        init {
+            tryLoad()
+        }
+    }
 }
+const val DESKTOP = "desktop"
+fun convertWindowName(windowTitle: String): String =
+    if (DESKTOP == windowTitle)
+        DESKTOP
+    else
+        "title=${FrameWindowFinder.findWindowTitle(windowTitle)}"
