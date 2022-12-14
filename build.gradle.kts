@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "org.jire.overwatcheat"
-version = "4.0.0"
+version = "4.1.0"
 
 dependencies {
     implementation(libs.fastutil)
