@@ -18,6 +18,7 @@
 
 package org.jire.overwatcheat
 
+import org.bytedeco.javacv.FFmpegLogCallback
 import org.jire.overwatcheat.aimbot.AimBotThread
 import org.jire.overwatcheat.aimbot.AimColorMatcher
 import org.jire.overwatcheat.aimbot.AimFrameHandler
@@ -31,6 +32,8 @@ object Main {
 
     @JvmStatic
     fun main(args: Array<String>) {
+        FFmpegLogCallback.set()
+
         Settings.read()
 
         val captureWidth = Settings.boxWidth

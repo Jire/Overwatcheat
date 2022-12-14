@@ -5,7 +5,7 @@ plugins {
 group = "org.jire.overwatcheat.gradle_build"
 version = "0.1.0"
 
-val kotlinVersion = "1.7.20"
+val kotlinVersion = "1.8.0-RC"
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")

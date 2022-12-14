@@ -18,35 +18,12 @@
 
 package org.jire.overwatcheat.gradle_build.projects
 
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
-import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class KotlinProjectPlugin : Plugin<Project> {
 
     private fun configureCompileJava(project: Project) {
-        project.run {
-            plugins.withType<JavaPlugin>().configureEach {
-                configure<JavaPluginExtension> {
-                    sourceCompatibility = JavaVersion.VERSION_17
-                    targetCompatibility = JavaVersion.VERSION_17
-                }
-            }
-
-            tasks.withType<JavaCompile>().configureEach {
-                options.encoding = "UTF-8"
-                options.release.set(17)
-            }
-        }
     }
 
     override fun apply(target: Project) {
@@ -54,33 +31,7 @@ class KotlinProjectPlugin : Plugin<Project> {
             plugins.apply("org.jetbrains.kotlin.jvm")
 
             configureCompileJava(target)
-
-            tasks.withType<KotlinCompile>().configureEach {
-                kotlinOptions {
-                    jvmTarget = "17"
-                }
-            }
-
-            val kotlinPluginVersion = getKotlinPluginVersion()
-
-            plugins.withType<KotlinPluginWrapper>().configureEach {
-                dependencies {
-                    configurations.named("api").configure {
-                        for (module in kotlinModules) {
-                            invoke("org.jetbrains.kotlin:kotlin-$module") {
-                                version {
-                                    strictly(kotlinPluginVersion)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
-    }
-
-    private companion object {
-        val kotlinModules = listOf("stdlib", "stdlib-common", "stdlib-jdk7", "stdlib-jdk8")
     }
 
 }

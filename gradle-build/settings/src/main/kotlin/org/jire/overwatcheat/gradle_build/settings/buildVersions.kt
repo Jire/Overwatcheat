@@ -31,8 +31,8 @@ fun VersionCatalogBuilder.buildVersions() {
 
 fun VersionCatalogBuilder.buildMisc() {
     libraryVersioned("it.unimi.dsi", "fastutil", "8.5.9")
-    libraryVersioned("org.bytedeco", "javacv-platform", "1.5.7")
-    libraryVersioned("com.kotcrab.vis", "vis-ui", "1.5.0")
+    libraryVersioned("org.bytedeco", "javacv-platform", "1.5.8")
+    libraryVersioned("com.kotcrab.vis", "vis-ui", "1.5.1")
 }
 
 fun VersionCatalogBuilder.buildJNA() = buildGroup("net.java.dev.jna", "jna") {
