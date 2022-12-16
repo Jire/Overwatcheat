@@ -16,25 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jire.overwatcheat.framegrab
+package org.jire.overwatcheat.util
 
-import org.bytedeco.javacv.FFmpegFrameGrabber
+object Threads {
 
-class FrameGrabberThread(
-    val frameGrabber: FFmpegFrameGrabber,
-    val frameHandler: FrameHandler
-) : Thread("Frame Grabber") {
+    fun preciseSleep(totalNanos: Long) {
+        val startTime = System.nanoTime()
 
-    override fun run() {
-        priority = MAX_PRIORITY
-        frameGrabber.start()
-        try {
-            while (true) {
-                val frame = frameGrabber.grabImage()
-                frameHandler.handle(frame)
-            }
-        } finally {
-            frameGrabber.stop()
+        // busy-waiting
+        while (System.nanoTime() - startTime < totalNanos) {
+            Thread.onSpinWait()
         }
     }
 

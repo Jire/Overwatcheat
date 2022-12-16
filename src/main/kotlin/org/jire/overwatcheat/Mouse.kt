@@ -18,71 +18,56 @@
 
 package org.jire.overwatcheat
 
-import com.sun.jna.Callback
 import org.jire.overwatcheat.nativelib.Kernel32
-import org.jire.overwatcheat.nativelib.interception.Interception
 import org.jire.overwatcheat.nativelib.interception.InterceptionFilter
 import org.jire.overwatcheat.nativelib.interception.InterceptionMouseFlag
-import org.jire.overwatcheat.nativelib.interception.InterceptionStroke
+import org.jire.overwatcheat.nativelib.interception.InterceptionPanama
+import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.interceptionMouseStrokeLayout
+import java.lang.Thread.sleep
+import java.lang.foreign.MemorySegment
+import java.lang.foreign.MemorySession
+import java.lang.foreign.ValueLayout
 
-object Mouse : Thread() {
+object Mouse {
 
-    private val mouseCallback = object : Callback {
-        fun callback(device: Int) = Interception.interception_is_mouse(device)
-    }
-    private val keyboardCallback = object : Callback {
-        fun callback(device: Int) = Interception.interception_is_keyboard(device)
-    }
-    private val context = Interception.interception_create_context()
-    private val emptyStroke = InterceptionStroke()
+    private val context = InterceptionPanama.interception_create_context()
 
-    override fun run() {
-        var device: Int
-        while (Interception.interception_receive(
-                context,
-                Interception.interception_wait(context).also { device = it },
-                emptyStroke,
-                1
-            ) > 0
-        ) {
-            if (!emptyStroke.isInjected) {
-                Interception.interception_send(context, device, emptyStroke, 1)
-            }
+    val stroke =
+        MemorySegment.allocateNative(interceptionMouseStrokeLayout, MemorySession.global()).apply {
+            set(ValueLayout.JAVA_SHORT, 0, 0) // state
+            set(ValueLayout.JAVA_SHORT, 2, 0) // flags
+            set(ValueLayout.JAVA_SHORT, 4, 0) // rolling
+            set(ValueLayout.JAVA_INT, 8, 0) // x
+            set(ValueLayout.JAVA_INT, 12, 0) // y
+            set(
+                ValueLayout.JAVA_SHORT, 14,
+                (InterceptionMouseFlag.INTERCEPTION_MOUSE_MOVE_RELATIVE or
+                        InterceptionMouseFlag.INTERCEPTION_MOUSE_CUSTOM).toShort()
+            ) // information
         }
-        Interception.interception_destroy_context(context)
-    }
-
-    val stroke = InterceptionStroke(
-        0, 0,
-        (InterceptionMouseFlag.INTERCEPTION_MOUSE_MOVE_RELATIVE or
-                InterceptionMouseFlag.INTERCEPTION_MOUSE_CUSTOM).toShort(),
-        0, 0, 0, 0, true
-    )
 
     fun move(x: Int, y: Int, deviceID: Int) {
-        stroke.x = x
-        stroke.y = y
-        Interception.interception_send(context, deviceID, stroke, 1)
+        stroke.run {
+            set(ValueLayout.JAVA_INT, 8, x)
+            set(ValueLayout.JAVA_INT, 12, y)
+        }
+        InterceptionPanama.interception_send(context, deviceID, stroke, 1)
     }
 
     fun click(deviceID: Int) {
-        stroke.x = 0
-        stroke.y = 0
-        stroke.code = InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN.toShort()
-        Interception.interception_send(context, deviceID, stroke, 1)
-        Thread.sleep(300)
-        stroke.code = InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_UP.toShort()
-        Interception.interception_send(context, deviceID, stroke, 1)
+        stroke.run {
+            setAtIndex(ValueLayout.JAVA_INT, 0, InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN)
+            set(ValueLayout.JAVA_INT, 8, 0)
+            set(ValueLayout.JAVA_INT, 12, 0)
+        }
+        InterceptionPanama.interception_send(context, deviceID, stroke, 1)
+        sleep(300)
+        stroke.setAtIndex(ValueLayout.JAVA_INT, 0, InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_UP)
+        InterceptionPanama.interception_send(context, deviceID, stroke, 1)
     }
 
     init {
         Kernel32.SetPriorityClass(Kernel32.GetCurrentProcess(), Kernel32.HIGH_PRIORITY_CLASS)
-        Interception.interception_set_filter(
-            context,
-            mouseCallback,
-            InterceptionFilter.INTERCEPTION_FILTER_MOUSE_MOVE.toShort()
-        )
-        start()
     }
 
 }

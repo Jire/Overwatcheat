@@ -24,13 +24,13 @@ The first step is to compile the source code into a usable cheat program.
 * Click on the [**Releases**](https://github.com/Jire/Overwatcheat/releases) tab
 * Download the latest release ZIP archive
 * Extract the contents from the archive to any folder (to your desktop, for example)
-* Make sure you have Java Development Kit 8 or later installed
+* Make sure you have Java Development Kit 19 or later installed
 * Double click on the "_build_" (_build.bat_) script and wait for it to complete
 
 Once those steps are complete, the usable cheat program can be found within the _build_
-directory, and will in a directory called **Overwatcheat 3.5.0**.
+directory, and will in a directory called **Overwatcheat 5.0.0**.
 
-From within the **Overwatcheat 3.5.0** directory, you can start the cheat by running the _"Start Overwatcheat 3.5.0"_
+From within the **Overwatcheat 5.0.0** directory, you can start the cheat by running the _"Start Overwatcheat 5.0.0"_
 script.
 
 **Requirements:**

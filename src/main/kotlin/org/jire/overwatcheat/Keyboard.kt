@@ -18,11 +18,11 @@
 
 package org.jire.overwatcheat
 
-import org.jire.overwatcheat.nativelib.User32
+import org.jire.overwatcheat.nativelib.User32Panama
 
 object Keyboard {
 
-    fun keyState(virtualKeyCode: Int) = User32.GetKeyState(virtualKeyCode)
+    fun keyState(virtualKeyCode: Int) = User32Panama.GetKeyState(virtualKeyCode)
 
     fun keyPressed(virtualKeyCode: Int) = keyState(virtualKeyCode) < 0
 

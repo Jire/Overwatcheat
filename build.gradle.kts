@@ -9,7 +9,13 @@ plugins {
 }
 
 group = "org.jire.overwatcheat"
-version = "4.1.0"
+version = "5.0.0"
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(19))
+    }
+}
 
 dependencies {
     implementation(libs.fastutil)
@@ -34,6 +40,7 @@ dependencies {
 application {
     applicationName = "Overwatcheat"
     mainClass.set("org.jire.overwatcheat.Main")
+    applicationDefaultJvmArgs += "--enable-native-access=ALL-UNNAMED"
 }
 
 tasks {
@@ -91,6 +98,6 @@ fun File.writeStartBat(name: String, jarName: String) =
         """@echo off
     cd /d "%~dp0"
     title $name
-    java -jar "$jarName"
+    java --enable-native-access=ALL-UNNAMED -jar "$jarName"
     pause""".trimIndent()
     )

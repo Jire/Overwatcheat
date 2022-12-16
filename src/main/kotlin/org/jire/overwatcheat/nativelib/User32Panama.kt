@@ -16,26 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jire.overwatcheat.framegrab
+package org.jire.overwatcheat.nativelib
 
-import org.bytedeco.javacv.FFmpegFrameGrabber
+import java.lang.foreign.*
 
-class FrameGrabberThread(
-    val frameGrabber: FFmpegFrameGrabber,
-    val frameHandler: FrameHandler
-) : Thread("Frame Grabber") {
+object User32Panama {
 
-    override fun run() {
-        priority = MAX_PRIORITY
-        frameGrabber.start()
-        try {
-            while (true) {
-                val frame = frameGrabber.grabImage()
-                frameHandler.handle(frame)
-            }
-        } finally {
-            frameGrabber.stop()
-        }
-    }
+    val linker = Linker.nativeLinker()
+    val user32 = SymbolLookup.libraryLookup("User32", MemorySession.global())
+    val getKeyState = linker.downcallHandle(
+        user32.lookup("GetKeyState").get(),
+        FunctionDescriptor.of(ValueLayout.JAVA_SHORT, ValueLayout.JAVA_INT)
+    )
+
+    fun GetKeyState(nVirtKey: Int): Short = getKeyState.invokeExact(nVirtKey) as Short
 
 }

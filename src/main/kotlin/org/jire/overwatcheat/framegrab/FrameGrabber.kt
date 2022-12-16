@@ -38,6 +38,9 @@ class FrameGrabber(
 
         setOption("offset_x", captureOffsetX.toString())
         setOption("offset_y", captureOffsetY.toString())
+
+        setOption("draw_mouse", "0")
+        setOption("show_region", "0")
     }
 
     private companion object {

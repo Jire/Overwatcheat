@@ -22,6 +22,7 @@ import org.jire.overwatcheat.FastRandom
 import org.jire.overwatcheat.Keyboard
 import org.jire.overwatcheat.Mouse
 import org.jire.overwatcheat.settings.Settings
+import org.jire.overwatcheat.util.Threads
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 import kotlin.math.max
@@ -38,8 +39,10 @@ class AimBotThread(
     val random = FastRandom()
 
     override fun run() {
+        priority = MAX_PRIORITY
+
         val tlr = ThreadLocalRandom.current()
-        while (!interrupted()) {
+        while (true) {
             val elapsed = measureNanoTime {
                 if (!Keyboard.keyPressed(Settings.aimKey)) {
                     AimBotState.aimData = 0
@@ -54,10 +57,8 @@ class AimBotThread(
                 (Settings.aimDurationMultiplierBase + tlr.nextFloat())
             )
             val sleepTime = (aimDurationNanos * sleepTimeMultiplier).toLong() - elapsed
-            if (sleepTime > 0) {
-                val millis = sleepTime / 1_000_000
-                val nanos = sleepTime % 1_000_000
-                sleep(millis, nanos.toInt())
+            if (sleepTime > 100_000) {
+                Threads.preciseSleep(sleepTime)
             }
         }
     }
