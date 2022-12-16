@@ -18,11 +18,11 @@
 
 package org.jire.overwatcheat
 
-import org.jire.overwatcheat.nativelib.Kernel32
 import org.jire.overwatcheat.nativelib.interception.InterceptionFilter
 import org.jire.overwatcheat.nativelib.interception.InterceptionMouseFlag
-import org.jire.overwatcheat.nativelib.interception.InterceptionPanama
+import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.context
 import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.interceptionMouseStrokeLayout
+import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.interception_send
 import java.lang.Thread.sleep
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.MemorySession
@@ -30,9 +30,7 @@ import java.lang.foreign.ValueLayout
 
 object Mouse {
 
-    private val context = InterceptionPanama.interception_create_context()
-
-    val stroke =
+    val mouseStroke =
         MemorySegment.allocateNative(interceptionMouseStrokeLayout, MemorySession.global()).apply {
             set(ValueLayout.JAVA_SHORT, 0, 0) // state
             set(ValueLayout.JAVA_SHORT, 2, 0) // flags
@@ -47,27 +45,23 @@ object Mouse {
         }
 
     fun move(x: Int, y: Int, deviceID: Int) {
-        stroke.run {
+        mouseStroke.run {
             set(ValueLayout.JAVA_INT, 8, x)
             set(ValueLayout.JAVA_INT, 12, y)
         }
-        InterceptionPanama.interception_send(context, deviceID, stroke, 1)
+        interception_send(context, deviceID, mouseStroke, 1)
     }
 
     fun click(deviceID: Int) {
-        stroke.run {
-            setAtIndex(ValueLayout.JAVA_INT, 0, InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN)
+        mouseStroke.run {
+            set(ValueLayout.JAVA_INT, 0, InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN)
             set(ValueLayout.JAVA_INT, 8, 0)
             set(ValueLayout.JAVA_INT, 12, 0)
         }
-        InterceptionPanama.interception_send(context, deviceID, stroke, 1)
+        interception_send(context, deviceID, mouseStroke, 1)
         sleep(300)
-        stroke.setAtIndex(ValueLayout.JAVA_INT, 0, InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_UP)
-        InterceptionPanama.interception_send(context, deviceID, stroke, 1)
-    }
-
-    init {
-        Kernel32.SetPriorityClass(Kernel32.GetCurrentProcess(), Kernel32.HIGH_PRIORITY_CLASS)
+        mouseStroke.set(ValueLayout.JAVA_INT, 0, InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_UP)
+        interception_send(context, deviceID, mouseStroke, 1)
     }
 
 }

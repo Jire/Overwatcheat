@@ -27,34 +27,36 @@ class AimFrameHandler(val colorMatcher: AimColorMatcher) : FrameHandler {
     override fun handle(frame: Frame) {
         val frameWidth = frame.imageWidth
         val frameHeight = frame.imageHeight
-        val data = frame.image[0] as ByteBuffer
+        for (image in frame.image) {
+            val data = image as ByteBuffer
 
-        var found = false
-        var xHigh = Int.MIN_VALUE
-        var xLow = Int.MAX_VALUE
-        var yHigh = Int.MIN_VALUE
-        var yLow = Int.MAX_VALUE
-        for (x in 0..frameWidth - 1) {
-            for (y in 0..frameHeight - 1) {
-                val dataIndexBase = frameWidth * y * 3
-                val dataIndex = dataIndexBase + (x * 3)
-                if (!colorMatches(data, dataIndex)) continue
+            var found = false
+            var xHigh = Int.MIN_VALUE
+            var xLow = Int.MAX_VALUE
+            var yHigh = Int.MIN_VALUE
+            var yLow = Int.MAX_VALUE
+            for (x in 0..frameWidth - 1) {
+                for (y in 0..frameHeight - 1) {
+                    val dataIndexBase = frameWidth * y * 3
+                    val dataIndex = dataIndexBase + (x * 3)
+                    if (!colorMatches(data, dataIndex)) continue
 
-                found = true
-                if (x > xHigh) xHigh = x
-                if (x < xLow) xLow = x
-                if (y > yHigh) yHigh = y
-                if (y < yLow) yLow = y
+                    found = true
+                    if (x > xHigh) xHigh = x
+                    if (x < xLow) xLow = x
+                    if (y > yHigh) yHigh = y
+                    if (y < yLow) yLow = y
+                }
             }
-        }
 
-        AimBotState.aimData =
-            if (found)
-                (xLow.toLong() shl 48) or
-                        (xHigh.toLong() shl 32) or
-                        (yLow.toLong() shl 16) or
-                        yHigh.toLong()
-            else 0
+            AimBotState.aimData =
+                if (found)
+                    (xLow.toLong() shl 48) or
+                            (xHigh.toLong() shl 32) or
+                            (yLow.toLong() shl 16) or
+                            yHigh.toLong()
+                else 0
+        }
     }
 
     private fun pixelRGB(data: ByteBuffer, dataIndex: Int): Int {

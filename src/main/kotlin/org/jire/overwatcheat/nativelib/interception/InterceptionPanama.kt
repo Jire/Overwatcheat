@@ -30,6 +30,8 @@ object InterceptionPanama {
         FunctionDescriptor.of(ValueLayout.ADDRESS)
     )
 
+    val context = interception_create_context()
+
     fun interception_create_context() = interception_create_context.invokeExact() as MemoryAddress
 
     val interceptionMouseStrokeLayout: GroupLayout = MemoryLayout.structLayout(
@@ -41,20 +43,22 @@ object InterceptionPanama {
         ValueLayout.JAVA_INT
     )
 
+    private fun interceptionSendSymbol() = interception.lookup("interception_send").get()
+
     private val interception_send = linker.downcallHandle(
-        interception.lookup("interception_send").get(),
+        interceptionSendSymbol(),
         FunctionDescriptor.of(
             ValueLayout.JAVA_INT,
             ValueLayout.ADDRESS, ValueLayout.JAVA_INT, interceptionMouseStrokeLayout, ValueLayout.JAVA_INT
         )
     )
 
-    fun interception_send(context: Addressable, device: Int, stroke: MemorySegment, nstroke: Int) =
+    fun interception_send(context: Addressable, device: Int, stroke: MemorySegment, strokeCount: Int) =
         interception_send.invokeExact(
             context,
             device,
             stroke,
-            nstroke
+            strokeCount
         ) as Int
 
 }

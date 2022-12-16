@@ -25,6 +25,7 @@ import org.jire.overwatcheat.aimbot.AimFrameHandler
 import org.jire.overwatcheat.framegrab.FrameGrabber
 import org.jire.overwatcheat.framegrab.FrameGrabberThread
 import org.jire.overwatcheat.framegrab.FrameHandler
+import org.jire.overwatcheat.nativelib.Kernel32
 import org.jire.overwatcheat.overlay.OverlayManager
 import org.jire.overwatcheat.settings.Settings
 
@@ -32,6 +33,7 @@ object Main {
 
     @JvmStatic
     fun main(args: Array<String>) {
+        Kernel32.SetPriorityClass(Kernel32.GetCurrentProcess(), Kernel32.HIGH_PRIORITY_CLASS)
         FFmpegLogCallback.set()
 
         Settings.read()

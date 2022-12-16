@@ -41,6 +41,8 @@ class FrameGrabber(
 
         setOption("draw_mouse", "0")
         setOption("show_region", "0")
+
+        setOption("tune", "zerolatency")
     }
 
     private companion object {

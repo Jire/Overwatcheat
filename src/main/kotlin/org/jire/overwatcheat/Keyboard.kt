@@ -19,6 +19,12 @@
 package org.jire.overwatcheat
 
 import org.jire.overwatcheat.nativelib.User32Panama
+import org.jire.overwatcheat.nativelib.interception.InterceptionKeyState
+import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.context
+import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.interception_send
+import java.lang.foreign.MemorySegment
+import java.lang.foreign.MemorySession
+import java.lang.foreign.ValueLayout
 
 object Keyboard {
 
@@ -28,4 +34,28 @@ object Keyboard {
 
     fun keyReleased(virtualKeyCode: Int) = !keyPressed(virtualKeyCode)
 
+    val keyStroke =
+        MemorySegment.allocateNative(18, 4, MemorySession.global()).apply {
+            set(ValueLayout.JAVA_SHORT, 0, 0) // code
+            set(ValueLayout.JAVA_SHORT, 2, 0) // state
+            set(ValueLayout.JAVA_INT, 4, 0) // information
+        }
+
+    fun pressKey(key: Int, deviceId: Int) {
+        keyStroke.run {
+            set(ValueLayout.JAVA_SHORT, 0, key.toShort())
+            set(ValueLayout.JAVA_SHORT, 2, InterceptionKeyState.INTERCEPTION_KEY_DOWN.toShort())
+        }
+        interception_send(context, deviceId, keyStroke, 1)
+    }
+
+    fun releaseKey(key: Int, deviceId: Int) {
+        keyStroke.run {
+            set(ValueLayout.JAVA_SHORT, 0, key.toShort())
+            set(ValueLayout.JAVA_SHORT, 2, InterceptionKeyState.INTERCEPTION_KEY_UP.toShort())
+        }
+        interception_send(context, deviceId, keyStroke, 1)
+    }
+
 }
+

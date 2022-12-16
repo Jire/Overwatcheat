@@ -47,6 +47,7 @@ object Settings {
     val aimOffsetX by FloatSetting("aim_offset_x", 1.00F)
     val aimOffsetY by FloatSetting("aim_offset_y", 0.75F)
     val enableOverlay by BooleanSetting("enable_overlay", false)
+    val toggleInGameUI by BooleanSetting("toggle_in_game_ui", true)
 
     const val DEFAULT_FILE = "overwatcheat.cfg"
 
