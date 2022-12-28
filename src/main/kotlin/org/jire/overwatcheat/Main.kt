@@ -23,6 +23,7 @@ import org.bytedeco.javacv.FFmpegLogCallback
 import org.jire.overwatcheat.aimbot.AimBotThread
 import org.jire.overwatcheat.aimbot.AimColorMatcher
 import org.jire.overwatcheat.aimbot.AimFrameHandler
+import org.jire.overwatcheat.aimbot.ToggleUIThread
 import org.jire.overwatcheat.framegrab.FrameGrabber
 import org.jire.overwatcheat.framegrab.FrameGrabberThread
 import org.jire.overwatcheat.framegrab.FrameHandler
@@ -71,12 +72,16 @@ object Main {
         val maxSnapX = (captureWidth / Settings.maxSnapDivisor).toInt()
         val maxSnapY = (captureHeight / Settings.maxSnapDivisor).toInt()
 
+        val toggleUIThread = ToggleUIThread(Settings.keyboardId, 56, 44)
+
         val aimBotThread = AimBotThread(
             captureCenterX, captureCenterY,
             maxSnapX, maxSnapY
         )
 
+
         frameGrabberThread.start()
+        toggleUIThread.start()
         aimBotThread.start()
 
         if (Settings.enableOverlay) {

@@ -18,15 +18,36 @@
 
 package org.jire.overwatcheat.aimbot
 
-object AimBotState {
+import org.jire.overwatcheat.Keyboard
 
-    @Volatile
-    var aimData = 0L
+class ToggleUIThread(
+    private val keyboardId: Int,
+    private vararg val keyCodes: Int
+) : Thread("Toggle UI") {
 
-    @Volatile
-    var flicking = false
+    private val keyCodesReversed = keyCodes.reversedArray()
 
-    @Volatile
-    var toggleUI = false
+    override fun run() {
+        while (true) {
+            if (AimBotState.toggleUI) {
+                toggleUI(keyboardId)
+
+                sleep(1)
+                AimBotState.toggleUI = false
+            }
+        }
+    }
+
+    private fun toggleUI(deviceId: Int) {
+        for (key in keyCodes) {
+            Keyboard.pressKey(key, deviceId)
+        }
+
+        sleep(1)
+
+        for (key in keyCodesReversed) {
+            Keyboard.releaseKey(key, deviceId)
+        }
+    }
 
 }

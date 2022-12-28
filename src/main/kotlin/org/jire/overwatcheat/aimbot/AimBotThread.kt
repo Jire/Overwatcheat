@@ -55,7 +55,9 @@ class AimBotThread(
             while (true) {
                 val elapsed = measureNanoTime {
                     val pressed = Keyboard.keyPressed(Settings.aimKey)
-                    if (Settings.toggleInGameUI && wasPressed != pressed) toggleUI(1)
+                    if (Settings.toggleInGameUI && wasPressed != pressed) {
+                        AimBotState.toggleUI = true
+                    }
                     wasPressed = pressed
                     if (!pressed) {
                         AimBotState.aimData = 0
@@ -124,24 +126,14 @@ class AimBotThread(
         Mouse.move(
             min(Settings.aimMaxMovePixels, moveX),
             min(Settings.aimMaxMovePixels, moveY),
-            Settings.deviceId
+            Settings.mouseId
         )
 
         if (AimBotState.flicking && abs(moveX) < Settings.flickPixels && abs(moveY) < Settings.flickPixels) {
             AimBotState.flicking = false
-            Mouse.click(Settings.deviceId)
+            Mouse.click(Settings.mouseId)
             sleep(Settings.flickPause.toLong(), 0)
         }
-    }
-
-    private fun toggleUI(deviceId: Int) {
-        Keyboard.pressKey(56, deviceId)
-        Keyboard.pressKey(44, deviceId)
-
-        sleep(1)
-
-        Keyboard.releaseKey(44, deviceId)
-        Keyboard.releaseKey(56, deviceId)
     }
 
 }
