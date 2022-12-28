@@ -32,9 +32,8 @@ class ToggleUIThread(
             if (AimBotState.toggleUI) {
                 toggleUI(keyboardId)
 
-                sleep(1)
                 AimBotState.toggleUI = false
-            }
+            } else sleep(1)
         }
     }
 
