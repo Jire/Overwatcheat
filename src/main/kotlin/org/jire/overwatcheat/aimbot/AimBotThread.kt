@@ -42,7 +42,7 @@ class AimBotThread(
     val random = FastRandom()
 
     override fun run() {
-        priority = MAX_PRIORITY
+        priority = MAX_PRIORITY - 1
 
         val tlr = ThreadLocalRandom.current()
         var wasPressed = false
