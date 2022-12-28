@@ -27,6 +27,7 @@ fun VersionCatalogBuilder.buildVersions() {
 
     version("jna", "5.12.1")
     version("gdx", "1.11.0")
+    version("slf4j", "2.0.6")
 }
 
 fun VersionCatalogBuilder.buildMisc() {
@@ -58,6 +59,11 @@ fun VersionCatalogBuilder.buildOpenHFT() {
     libraryVersioned("net.openhft", "chronicle-core", "2.24ea3")
 }
 
+fun VersionCatalogBuilder.buildSLF4J() = buildGroup("org.slf4j", "slf4j") {
+    "slf4j-api"()
+    "slf4j-simple"()
+}
+
 fun VersionCatalogBuilder.buildCatalog() {
     buildVersions()
 
@@ -65,6 +71,7 @@ fun VersionCatalogBuilder.buildCatalog() {
     buildJNA()
     buildGDX()
     buildOpenHFT()
+    buildSLF4J()
 }
 
 @Suppress("UnstableApiUsage")

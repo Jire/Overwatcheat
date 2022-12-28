@@ -18,6 +18,7 @@
 
 package org.jire.overwatcheat
 
+import net.openhft.chronicle.core.Jvm
 import org.bytedeco.javacv.FFmpegLogCallback
 import org.jire.overwatcheat.aimbot.AimBotThread
 import org.jire.overwatcheat.aimbot.AimColorMatcher
@@ -30,6 +31,10 @@ import org.jire.overwatcheat.overlay.OverlayManager
 import org.jire.overwatcheat.settings.Settings
 
 object Main {
+
+    init {
+        Jvm.init()
+    }
 
     @JvmStatic
     fun main(args: Array<String>) {

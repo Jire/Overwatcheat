@@ -38,14 +38,23 @@ dependencies {
     implementation(libs.gdx.freetype.platform)
 
     implementation(libs.gdx.backend.lwjgl3)
+
+    implementation(libs.slf4j.api)
+    runtimeOnly(libs.slf4j.simple)
 }
 
 application {
     applicationName = "Overwatcheat"
     mainClass.set("org.jire.overwatcheat.Main")
-    applicationDefaultJvmArgs += "--enable-native-access=ALL-UNNAMED"
-    applicationDefaultJvmArgs += "-Xmx16g"
-    applicationDefaultJvmArgs += "-Xms16g"
+    applicationDefaultJvmArgs += arrayOf(
+        "-Xmx8g",
+        "--enable-native-access=ALL-UNNAMED",
+        "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/java.io=ALL-UNNAMED",
+        "--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED"
+    )
 }
 
 tasks {
@@ -103,6 +112,6 @@ fun File.writeStartBat(name: String, jarName: String) =
         """@echo off
     cd /d "%~dp0"
     title $name
-    java --enable-native-access=ALL-UNNAMED -jar "$jarName"
+    java ${application.applicationDefaultJvmArgs.joinToString(" ")} -jar "$jarName"
     pause""".trimIndent()
     )
