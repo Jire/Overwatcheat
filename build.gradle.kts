@@ -109,10 +109,11 @@ fun TaskContainerScope.configureOverwatcheat() {
 }
 
 fun File.writeStartBat(name: String, jarName: String) =
-    resolve("Start ${name}.bat").writeText(
-        """@echo off
-    cd /d "%~dp0"
-    title $name
-    java ${application.applicationDefaultJvmArgs.joinToString(" ")} -jar "$jarName"
-    pause""".trimIndent()
-    )
+    resolve("Start ${name}.bat")
+        .writeText(
+            """@echo off
+cd /d "%~dp0"
+title $name
+java ${application.applicationDefaultJvmArgs.joinToString(" ")} -jar "$jarName"
+pause"""
+        )
