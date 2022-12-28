@@ -18,6 +18,7 @@
 
 package org.jire.overwatcheat.aimbot
 
+import net.openhft.affinity.AffinityLock
 import org.jire.overwatcheat.FastRandom
 import org.jire.overwatcheat.Keyboard
 import org.jire.overwatcheat.Mouse
@@ -34,6 +35,8 @@ class AimBotThread(
     val maxSnapX: Int, val maxSnapY: Int,
 ) : Thread("Aim Bot") {
 
+    private val targetCpuId: Int = Threads.threadsPerCore
+
     val aimDurationNanos = (Settings.aimDurationMillis * 1_000_000)
 
     val random = FastRandom()
@@ -43,27 +46,36 @@ class AimBotThread(
 
         val tlr = ThreadLocalRandom.current()
         var wasPressed = false
-        while (true) {
-            val elapsed = measureNanoTime {
-                val pressed = Keyboard.keyPressed(Settings.aimKey)
-                if (Settings.toggleInGameUI && wasPressed != pressed) toggleUI(1)
-                wasPressed = pressed
-                if (!pressed) {
-                    AimBotState.aimData = 0
-                    return@measureNanoTime
-                } else if (Settings.aimMode == 1) {
-                    AimBotState.flicking = true
+        val affinityLock: AffinityLock? =
+            // only acquire lock if we have at least 2 processors (threads)
+            if (System.getProperty("os.arch") != "aarch64" && Runtime.getRuntime().availableProcessors() > 1)
+                AffinityLock.acquireLock(targetCpuId)
+            else null
+        try {
+            while (true) {
+                val elapsed = measureNanoTime {
+                    val pressed = Keyboard.keyPressed(Settings.aimKey)
+                    if (Settings.toggleInGameUI && wasPressed != pressed) toggleUI(1)
+                    wasPressed = pressed
+                    if (!pressed) {
+                        AimBotState.aimData = 0
+                        return@measureNanoTime
+                    } else if (Settings.aimMode == 1) {
+                        AimBotState.flicking = true
+                    }
+                    useAimData(AimBotState.aimData)
                 }
-                useAimData(AimBotState.aimData)
+                val sleepTimeMultiplier = max(
+                    Settings.aimDurationMultiplierMax,
+                    (Settings.aimDurationMultiplierBase + tlr.nextFloat())
+                )
+                val sleepTime = (aimDurationNanos * sleepTimeMultiplier).toLong() - elapsed
+                if (sleepTime > 100_000) {
+                    Threads.preciseSleep(sleepTime)
+                }
             }
-            val sleepTimeMultiplier = max(
-                Settings.aimDurationMultiplierMax,
-                (Settings.aimDurationMultiplierBase + tlr.nextFloat())
-            )
-            val sleepTime = (aimDurationNanos * sleepTimeMultiplier).toLong() - elapsed
-            if (sleepTime > 100_000) {
-                Threads.preciseSleep(sleepTime)
-            }
+        } finally {
+            affinityLock?.release()
         }
     }
 

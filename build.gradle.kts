@@ -22,6 +22,9 @@ dependencies {
     implementation(libs.javacv.platform)
     implementation(libs.vis.ui)
 
+    implementation(libs.affinity)
+    implementation(libs.chronicle.core)
+
     implementation(libs.jna)
     implementation(libs.jna.platform)
 
@@ -41,6 +44,8 @@ application {
     applicationName = "Overwatcheat"
     mainClass.set("org.jire.overwatcheat.Main")
     applicationDefaultJvmArgs += "--enable-native-access=ALL-UNNAMED"
+    applicationDefaultJvmArgs += "-Xmx16g"
+    applicationDefaultJvmArgs += "-Xms16g"
 }
 
 tasks {

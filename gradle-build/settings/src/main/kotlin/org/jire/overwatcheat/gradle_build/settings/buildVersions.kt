@@ -30,7 +30,7 @@ fun VersionCatalogBuilder.buildVersions() {
 }
 
 fun VersionCatalogBuilder.buildMisc() {
-    libraryVersioned("it.unimi.dsi", "fastutil", "8.5.9")
+    libraryVersioned("it.unimi.dsi", "fastutil", "8.5.11")
     libraryVersioned("org.bytedeco", "javacv-platform", "1.5.8")
     libraryVersioned("com.kotcrab.vis", "vis-ui", "1.5.1")
 }
@@ -53,12 +53,18 @@ fun VersionCatalogBuilder.buildGDX() = buildGroup("com.badlogicgames.gdx", "gdx"
     "gdx-backend-lwjgl3"()
 }
 
+fun VersionCatalogBuilder.buildOpenHFT() {
+    libraryVersioned("net.openhft", "affinity", "3.23.2")
+    libraryVersioned("net.openhft", "chronicle-core", "2.24ea3")
+}
+
 fun VersionCatalogBuilder.buildCatalog() {
     buildVersions()
 
     buildMisc()
     buildJNA()
     buildGDX()
+    buildOpenHFT()
 }
 
 @Suppress("UnstableApiUsage")
