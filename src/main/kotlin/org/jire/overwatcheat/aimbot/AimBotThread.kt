@@ -126,6 +126,8 @@ class AimBotThread(
         Keyboard.pressKey(56, deviceId)
         Keyboard.pressKey(44, deviceId)
 
+        sleep(1)
+
         Keyboard.releaseKey(44, deviceId)
         Keyboard.releaseKey(56, deviceId)
     }
