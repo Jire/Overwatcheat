@@ -70,6 +70,7 @@ fun TaskContainerScope.configureShadowJar() {
         archiveVersion.set("${project.version}")
 
         isZip64 = true
+        //minimize() // needs to be updated for Java 19 support
     }
     named<Zip>("distZip").configure {
         enabled
