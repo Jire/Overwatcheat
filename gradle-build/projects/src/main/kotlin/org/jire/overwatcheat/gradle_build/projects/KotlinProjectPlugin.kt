@@ -23,7 +23,10 @@ import org.gradle.api.Project
 
 class KotlinProjectPlugin : Plugin<Project> {
 
-    private fun configureCompileJava(project: Project) {
+    private fun configureCompileJava(
+        @Suppress("UNUSED_PARAMETER")
+        project: Project
+    ) {
     }
 
     override fun apply(target: Project) {
