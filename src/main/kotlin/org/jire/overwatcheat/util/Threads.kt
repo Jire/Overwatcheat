@@ -24,7 +24,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object Threads {
-    
+
     private val logger: Logger = LoggerFactory.getLogger(Threads::class.java)
 
     private val availableProcessors =
@@ -38,7 +38,11 @@ object Threads {
                 var physicalCores = 0
 
                 val exec: Process =
-                    Runtime.getRuntime().exec("wmic CPU Get NumberOfCores /Format:List")
+                    Runtime.getRuntime()
+                        .exec(
+                            arrayOf("wmic", "CPU", "Get", "NumberOfCores", "/Format:List"),
+                            emptyArray()
+                        )
                 exec.inputReader().use { reader ->
                     do {
                         val line = reader.readLine() ?: break
