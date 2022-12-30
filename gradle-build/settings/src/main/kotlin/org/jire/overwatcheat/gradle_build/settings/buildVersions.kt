@@ -26,32 +26,17 @@ fun VersionCatalogBuilder.buildVersions() {
     version("kotlin", Versions.KOTLIN)
 
     version("jna", "5.12.1")
-    version("gdx", "1.11.0")
     version("slf4j", "2.0.6")
 }
 
 fun VersionCatalogBuilder.buildMisc() {
     libraryVersioned("it.unimi.dsi", "fastutil", "8.5.11")
     libraryVersioned("org.bytedeco", "javacv-platform", "1.5.8")
-    libraryVersioned("com.kotcrab.vis", "vis-ui", "1.5.1")
 }
 
 fun VersionCatalogBuilder.buildJNA() = buildGroup("net.java.dev.jna", "jna") {
     "jna"()
     "jna-platform"()
-}
-
-fun VersionCatalogBuilder.buildGDX() = buildGroup("com.badlogicgames.gdx", "gdx") {
-    "gdx"()
-    "gdx-platform"()
-
-    "gdx-box2d"()
-    "gdx-box2d-platform"()
-
-    "gdx-freetype"()
-    "gdx-freetype-platform"()
-
-    "gdx-backend-lwjgl3"()
 }
 
 fun VersionCatalogBuilder.buildOpenHFT() {
@@ -69,7 +54,6 @@ fun VersionCatalogBuilder.buildCatalog() {
 
     buildMisc()
     buildJNA()
-    buildGDX()
     buildOpenHFT()
     buildSLF4J()
 }

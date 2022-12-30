@@ -75,6 +75,9 @@ fun TaskContainerScope.configureShadowJar() {
     named<Tar>("distTar").configure {
         enabled = false
     }
+    named<CreateStartScripts>("startScripts").configure {
+        enabled = false
+    }
     named<CreateStartScripts>(SHADOW_SCRIPTS_TASK_NAME).configure {
         enabled = false
     }
