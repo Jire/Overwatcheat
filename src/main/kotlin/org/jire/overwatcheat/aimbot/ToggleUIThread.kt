@@ -19,13 +19,15 @@
 package org.jire.overwatcheat.aimbot
 
 import org.jire.overwatcheat.Keyboard
+import org.jire.overwatcheat.nativelib.User32Panama
 
 class ToggleUIThread(
     private val keyboardId: Int,
-    private vararg val keyCodes: Int
+    vararg keyCodes: Int
 ) : Thread("Toggle UI") {
 
-    private val keyCodesReversed = keyCodes.reversedArray()
+    private val scanCodes = keyCodes.map { User32Panama.MapVirtualKeyA(it) }.toTypedArray()
+    private val scanCodesReversed = scanCodes.reversedArray()
 
     override fun run() {
         while (true) {
@@ -38,13 +40,13 @@ class ToggleUIThread(
     }
 
     private fun toggleUI(deviceId: Int) {
-        for (key in keyCodes) {
+        for (key in scanCodes) {
             Keyboard.pressKey(key, deviceId)
         }
 
         sleep(1)
 
-        for (key in keyCodesReversed) {
+        for (key in scanCodesReversed) {
             Keyboard.releaseKey(key, deviceId)
         }
     }
