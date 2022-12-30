@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.ShadowApplicationPlugin.SHADOW_SCRIPTS_TASK_NAME
 import org.jetbrains.kotlin.incremental.deleteRecursivelyOrThrow
 
 plugins {
@@ -73,9 +74,12 @@ fun TaskContainerScope.configureShadowJar() {
         //minimize() // needs to be updated for Java 19 support
     }
     named<Zip>("distZip").configure {
-        enabled
+        enabled = false
     }
     named<Tar>("distTar").configure {
+        enabled = false
+    }
+    named<CreateStartScripts>(SHADOW_SCRIPTS_TASK_NAME).configure {
         enabled = false
     }
 }
