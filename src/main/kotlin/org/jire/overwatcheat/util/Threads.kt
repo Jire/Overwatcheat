@@ -63,13 +63,4 @@ object Threads {
         } else AffinityLock.cpuLayout().threadsPerCore()
     }
 
-    fun preciseSleep(totalNanos: Long) {
-        val startTime = System.nanoTime()
-
-        // busy-waiting
-        while (System.nanoTime() - startTime < totalNanos) {
-            Thread.onSpinWait()
-        }
-    }
-
 }

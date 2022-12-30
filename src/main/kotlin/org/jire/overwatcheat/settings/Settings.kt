@@ -18,6 +18,7 @@
 
 package org.jire.overwatcheat.settings
 
+import org.jire.overwatcheat.util.PreciseSleeper
 import java.awt.event.KeyEvent
 import java.io.File
 
@@ -51,6 +52,7 @@ object Settings {
     val enableOverlay by BooleanSetting("enable_overlay", false)
     val toggleInGameUI by BooleanSetting("toggle_in_game_ui", true)
     val toggleKeyCodes by HexIntArraySetting("toggle_key_codes", intArrayOf(KeyEvent.VK_ALT, KeyEvent.VK_Z))
+    val aimPreciseSleeperType by IntSetting("aim_precise_sleeper_type", PreciseSleeper.YIELD.type)
 
     const val DEFAULT_FILE = "overwatcheat.cfg"
 

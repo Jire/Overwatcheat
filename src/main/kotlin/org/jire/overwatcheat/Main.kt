@@ -30,6 +30,7 @@ import org.jire.overwatcheat.framegrab.FrameHandler
 import org.jire.overwatcheat.nativelib.Kernel32
 import org.jire.overwatcheat.overlay.OverlayManager
 import org.jire.overwatcheat.settings.Settings
+import org.jire.overwatcheat.util.PreciseSleeper
 
 object Main {
 
@@ -74,9 +75,11 @@ object Main {
 
         val toggleUIThread = ToggleUIThread(Settings.keyboardId, *Settings.toggleKeyCodes)
 
+        val preciseSleeper = PreciseSleeper[Settings.aimPreciseSleeperType] ?: PreciseSleeper.YIELD
         val aimBotThread = AimBotThread(
             captureCenterX, captureCenterY,
-            maxSnapX, maxSnapY
+            maxSnapX, maxSnapY,
+            preciseSleeper
         )
 
         frameGrabberThread.start()

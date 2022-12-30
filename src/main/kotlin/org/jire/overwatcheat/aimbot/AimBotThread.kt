@@ -23,6 +23,7 @@ import org.jire.overwatcheat.FastRandom
 import org.jire.overwatcheat.Keyboard
 import org.jire.overwatcheat.Mouse
 import org.jire.overwatcheat.settings.Settings
+import org.jire.overwatcheat.util.PreciseSleeper
 import org.jire.overwatcheat.util.Threads
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
@@ -33,6 +34,7 @@ import kotlin.system.measureNanoTime
 class AimBotThread(
     val captureCenterX: Int, val captureCenterY: Int,
     val maxSnapX: Int, val maxSnapY: Int,
+    val preciseSleeper: PreciseSleeper
 ) : Thread("Aim Bot") {
 
     private val targetCpuId: Int = Threads.threadsPerCore
@@ -73,7 +75,7 @@ class AimBotThread(
                 )
                 val sleepTime = (aimDurationNanos * sleepTimeMultiplier).toLong() - elapsed
                 if (sleepTime > 100_000) {
-                    Threads.preciseSleep(sleepTime)
+                    preciseSleeper.preciseSleep(sleepTime)
                 }
             }
         } finally {
