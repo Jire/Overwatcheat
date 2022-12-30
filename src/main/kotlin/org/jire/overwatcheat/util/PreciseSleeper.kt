@@ -54,7 +54,7 @@ enum class PreciseSleeper(val type: Int) {
 
         private val typeToSleeper: Int2ObjectMap<PreciseSleeper> =
             Int2ObjectOpenHashMap<PreciseSleeper>(values.size).apply {
-                for (value in values) {
+                for (value in PreciseSleeper.values) {
                     put(value.type, value)
                 }
             }

@@ -35,7 +35,7 @@ enum class AimMode(
 
         private val typeToAimMode: Int2ObjectMap<AimMode> =
             Int2ObjectOpenHashMap<AimMode>(values.size).apply {
-                for (value in values) {
+                for (value in AimMode.values) {
                     put(value.type, value)
                 }
             }
