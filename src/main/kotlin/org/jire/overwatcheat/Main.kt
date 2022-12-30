@@ -30,7 +30,6 @@ import org.jire.overwatcheat.framegrab.FrameHandler
 import org.jire.overwatcheat.nativelib.Kernel32
 import org.jire.overwatcheat.overlay.OverlayManager
 import org.jire.overwatcheat.settings.Settings
-import java.awt.event.KeyEvent
 
 object Main {
 
@@ -73,16 +72,12 @@ object Main {
         val maxSnapX = (captureWidth / Settings.maxSnapDivisor).toInt()
         val maxSnapY = (captureHeight / Settings.maxSnapDivisor).toInt()
 
-        val toggleUIThread = ToggleUIThread(
-            Settings.keyboardId,
-            KeyEvent.VK_ALT, KeyEvent.VK_Z
-        )
+        val toggleUIThread = ToggleUIThread(Settings.keyboardId, *Settings.toggleKeyCodes)
 
         val aimBotThread = AimBotThread(
             captureCenterX, captureCenterY,
             maxSnapX, maxSnapY
         )
-
 
         frameGrabberThread.start()
         toggleUIThread.start()

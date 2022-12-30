@@ -18,6 +18,7 @@
 
 package org.jire.overwatcheat.settings
 
+import java.awt.event.KeyEvent
 import java.io.File
 
 object Settings {
@@ -49,6 +50,7 @@ object Settings {
     val aimOffsetY by FloatSetting("aim_offset_y", 0.75F)
     val enableOverlay by BooleanSetting("enable_overlay", false)
     val toggleInGameUI by BooleanSetting("toggle_in_game_ui", true)
+    val toggleKeyCodes by IntArraySetting("toggle_key_codes", intArrayOf(KeyEvent.VK_ALT, KeyEvent.VK_Z))
 
     const val DEFAULT_FILE = "overwatcheat.cfg"
 
