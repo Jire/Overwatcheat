@@ -37,7 +37,11 @@ application {
     applicationName = "Overwatcheat"
     mainClass.set("org.jire.overwatcheat.Main")
     applicationDefaultJvmArgs += arrayOf(
-        "-Xmx4g -Xms1g",
+        "-Xmx4g",
+        "-Xms1g",
+
+        "-XX:+UnlockExperimentalVMOptions",
+        "-XX:+UseZGC",
 
         "--enable-native-access=ALL-UNNAMED",
 
