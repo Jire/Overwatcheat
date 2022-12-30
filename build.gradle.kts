@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.ShadowApplicationPlugin.SHADOW_INSTALL_TASK_NAME
 import com.github.jengelman.gradle.plugins.shadow.ShadowApplicationPlugin.SHADOW_SCRIPTS_TASK_NAME
 import org.jetbrains.kotlin.incremental.deleteRecursivelyOrThrow
 
@@ -19,42 +20,33 @@ kotlin {
 }
 
 dependencies {
+    implementation(libs.slf4j.api)
+    runtimeOnly(libs.slf4j.simple)
+
     implementation(libs.fastutil)
     implementation(libs.javacv.platform)
-    implementation(libs.vis.ui)
 
     implementation(libs.affinity)
     implementation(libs.chronicle.core)
 
     implementation(libs.jna)
     implementation(libs.jna.platform)
-
-    implementation(libs.gdx)
-    implementation(libs.gdx.platform)
-
-    implementation(libs.gdx.box2d)
-    implementation(libs.gdx.box2d.platform)
-
-    implementation(libs.gdx.freetype)
-    implementation(libs.gdx.freetype.platform)
-
-    implementation(libs.gdx.backend.lwjgl3)
-
-    implementation(libs.slf4j.api)
-    runtimeOnly(libs.slf4j.simple)
 }
 
 application {
     applicationName = "Overwatcheat"
     mainClass.set("org.jire.overwatcheat.Main")
     applicationDefaultJvmArgs += arrayOf(
-        "-Xmx8g",
+        "-Xmx4g -Xms1g",
+
         "--enable-native-access=ALL-UNNAMED",
-        "--add-opens=java.base/java.time=ALL-UNNAMED",
-        "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
+
         "--add-opens=java.base/java.lang=ALL-UNNAMED",
         "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
         "--add-opens=java.base/java.io=ALL-UNNAMED",
+        "--add-opens=java.base/java.time=ALL-UNNAMED",
+
+        "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
         "--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED"
     )
 }
@@ -80,6 +72,15 @@ fun TaskContainerScope.configureShadowJar() {
         enabled = false
     }
     named<CreateStartScripts>(SHADOW_SCRIPTS_TASK_NAME).configure {
+        enabled = false
+    }
+    named(SHADOW_INSTALL_TASK_NAME).configure {
+        enabled = false
+    }
+    named("shadowDistTar").configure {
+        enabled = false
+    }
+    named("shadowDistZip").configure {
         enabled = false
     }
 }

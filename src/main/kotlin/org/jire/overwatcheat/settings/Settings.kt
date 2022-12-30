@@ -49,7 +49,6 @@ object Settings {
     val keyboardId by IntSetting("keyboard_id", 1)
     val aimOffsetX by FloatSetting("aim_offset_x", 1.00F)
     val aimOffsetY by FloatSetting("aim_offset_y", 0.75F)
-    val enableOverlay by BooleanSetting("enable_overlay", false)
     val toggleInGameUI by BooleanSetting("toggle_in_game_ui", true)
     val toggleKeyCodes by HexIntArraySetting("toggle_key_codes", intArrayOf(KeyEvent.VK_ALT, KeyEvent.VK_Z))
     val aimPreciseSleeperType by IntSetting("aim_precise_sleeper_type", PreciseSleeper.YIELD.type)

@@ -18,34 +18,47 @@
 
 package org.jire.overwatcheat.nativelib.interception
 
-import com.sun.jna.Callback
-import com.sun.jna.Pointer
-import org.jire.overwatcheat.nativelib.DirectNativeLib
+import java.lang.foreign.*
 
-object Interception : DirectNativeLib("interception") {
+object Interception {
 
-    @JvmStatic
-    external fun interception_is_keyboard(device: Int): Int
+    private val linker = Linker.nativeLinker()
+    private val interception = SymbolLookup.libraryLookup("interception", MemorySession.global())
 
-    @JvmStatic
-    external fun interception_is_mouse(device: Int): Int
+    private val interception_create_context = linker.downcallHandle(
+        interception.lookup("interception_create_context").get(),
+        FunctionDescriptor.of(ValueLayout.ADDRESS)
+    )
 
-    @JvmStatic
-    external fun interception_create_context(): Pointer
+    val interceptionContext = interception_create_context()
 
-    @JvmStatic
-    external fun interception_set_filter(context: Pointer, predicate: Callback, filter: Short)
+    private fun interception_create_context() = interception_create_context.invokeExact() as MemoryAddress
 
-    @JvmStatic
-    external fun interception_receive(context: Pointer, device: Int, stroke: InterceptionStroke, nstroke: Int): Int
+    val interceptionMouseStrokeLayout: GroupLayout = MemoryLayout.structLayout(
+        ValueLayout.JAVA_SHORT,
+        ValueLayout.JAVA_SHORT,
+        ValueLayout.JAVA_SHORT,
+        ValueLayout.JAVA_INT,
+        ValueLayout.JAVA_INT,
+        ValueLayout.JAVA_INT
+    )
 
-    @JvmStatic
-    external fun interception_wait(context: Pointer): Int
+    private fun interceptionSendSymbol() = interception.lookup("interception_send").get()
 
-    @JvmStatic
-    external fun interception_send(context: Pointer, device: Int, stroke: InterceptionStroke, nstroke: Int): Int
+    private val interception_send = linker.downcallHandle(
+        interceptionSendSymbol(),
+        FunctionDescriptor.of(
+            ValueLayout.JAVA_INT,
+            ValueLayout.ADDRESS, ValueLayout.JAVA_INT, interceptionMouseStrokeLayout, ValueLayout.JAVA_INT
+        )
+    )
 
-    @JvmStatic
-    external fun interception_destroy_context(context: Pointer)
+    fun interception_send(context: Addressable, device: Int, stroke: MemorySegment, strokeCount: Int) =
+        interception_send.invokeExact(
+            context,
+            device,
+            stroke,
+            strokeCount
+        ) as Int
 
 }

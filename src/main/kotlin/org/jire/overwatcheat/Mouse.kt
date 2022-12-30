@@ -18,11 +18,11 @@
 
 package org.jire.overwatcheat
 
+import org.jire.overwatcheat.nativelib.interception.Interception.interceptionContext
+import org.jire.overwatcheat.nativelib.interception.Interception.interceptionMouseStrokeLayout
+import org.jire.overwatcheat.nativelib.interception.Interception.interception_send
 import org.jire.overwatcheat.nativelib.interception.InterceptionFilter
 import org.jire.overwatcheat.nativelib.interception.InterceptionMouseFlag
-import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.context
-import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.interceptionMouseStrokeLayout
-import org.jire.overwatcheat.nativelib.interception.InterceptionPanama.interception_send
 import java.lang.Thread.sleep
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.MemorySession
@@ -49,7 +49,7 @@ object Mouse {
             set(ValueLayout.JAVA_INT, 8, x)
             set(ValueLayout.JAVA_INT, 12, y)
         }
-        interception_send(context, deviceID, mouseStroke, 1)
+        interception_send(interceptionContext, deviceID, mouseStroke, 1)
     }
 
     fun click(deviceID: Int) {
@@ -58,10 +58,10 @@ object Mouse {
             set(ValueLayout.JAVA_INT, 8, 0)
             set(ValueLayout.JAVA_INT, 12, 0)
         }
-        interception_send(context, deviceID, mouseStroke, 1)
+        interception_send(interceptionContext, deviceID, mouseStroke, 1)
         sleep(300)
         mouseStroke.set(ValueLayout.JAVA_INT, 0, InterceptionFilter.INTERCEPTION_MOUSE_LEFT_BUTTON_UP)
-        interception_send(context, deviceID, mouseStroke, 1)
+        interception_send(interceptionContext, deviceID, mouseStroke, 1)
     }
 
 }

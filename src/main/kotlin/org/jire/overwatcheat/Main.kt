@@ -28,7 +28,6 @@ import org.jire.overwatcheat.framegrab.FrameGrabber
 import org.jire.overwatcheat.framegrab.FrameGrabberThread
 import org.jire.overwatcheat.framegrab.FrameHandler
 import org.jire.overwatcheat.nativelib.Kernel32
-import org.jire.overwatcheat.overlay.OverlayManager
 import org.jire.overwatcheat.settings.Settings
 import org.jire.overwatcheat.util.PreciseSleeper
 
@@ -86,10 +85,6 @@ object Main {
         frameGrabberThread.start()
         toggleUIThread.start()
         aimBotThread.start()
-
-        if (Settings.enableOverlay) {
-            OverlayManager.open(captureOffsetX, captureOffsetY)
-        }
     }
 
 }
