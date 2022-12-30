@@ -24,7 +24,6 @@ import org.jire.overwatcheat.Keyboard
 import org.jire.overwatcheat.Mouse
 import org.jire.overwatcheat.settings.Settings
 import org.jire.overwatcheat.util.PreciseSleeper
-import org.jire.overwatcheat.util.Threads
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 import kotlin.math.max
@@ -34,10 +33,9 @@ import kotlin.system.measureNanoTime
 class AimBotThread(
     val captureCenterX: Int, val captureCenterY: Int,
     val maxSnapX: Int, val maxSnapY: Int,
-    val preciseSleeper: PreciseSleeper
+    val preciseSleeper: PreciseSleeper,
+    val cpuThreadAffinityIndex: Int
 ) : Thread("Aim Bot") {
-
-    private val targetCpuId: Int = Threads.threadsPerCore
 
     val aimDurationNanos = (Settings.aimDurationMillis * 1_000_000)
 
@@ -49,9 +47,11 @@ class AimBotThread(
         val tlr = ThreadLocalRandom.current()
         var wasPressed = false
         val affinityLock: AffinityLock? =
-            // only acquire lock if we have at least 2 processors (threads)
-            if (System.getProperty("os.arch") != "aarch64" && Runtime.getRuntime().availableProcessors() > 1)
-                AffinityLock.acquireLock(targetCpuId)
+            if (cpuThreadAffinityIndex >= 0
+                && System.getProperty("os.arch") != "aarch64"
+                && Runtime.getRuntime().availableProcessors() > 1 /* only acquire lock if we have at least 2 threads
+                                                                     as just one core would freeze the machine */
+            ) AffinityLock.acquireLock(cpuThreadAffinityIndex)
             else null
         try {
             while (true) {

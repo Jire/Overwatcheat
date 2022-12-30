@@ -53,6 +53,7 @@ object Settings {
     val toggleInGameUI by BooleanSetting("toggle_in_game_ui", true)
     val toggleKeyCodes by HexIntArraySetting("toggle_key_codes", intArrayOf(KeyEvent.VK_ALT, KeyEvent.VK_Z))
     val aimPreciseSleeperType by IntSetting("aim_precise_sleeper_type", PreciseSleeper.YIELD.type)
+    val aimCpuThreadAffinityIndex by IntSetting("aim_cpu_thread_affinity_index", -1)
 
     const val DEFAULT_FILE = "overwatcheat.cfg"
 

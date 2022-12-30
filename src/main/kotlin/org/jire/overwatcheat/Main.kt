@@ -79,7 +79,8 @@ object Main {
         val aimBotThread = AimBotThread(
             captureCenterX, captureCenterY,
             maxSnapX, maxSnapY,
-            preciseSleeper
+            preciseSleeper,
+            Settings.aimCpuThreadAffinityIndex
         )
 
         frameGrabberThread.start()
