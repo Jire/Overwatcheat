@@ -20,16 +20,14 @@ package org.jire.overwatcheat
 
 import net.openhft.chronicle.core.Jvm
 import org.bytedeco.javacv.FFmpegLogCallback
-import org.jire.overwatcheat.aimbot.AimBotThread
-import org.jire.overwatcheat.aimbot.AimColorMatcher
-import org.jire.overwatcheat.aimbot.AimFrameHandler
-import org.jire.overwatcheat.aimbot.ToggleUIThread
+import org.jire.overwatcheat.aimbot.*
 import org.jire.overwatcheat.framegrab.FrameGrabber
 import org.jire.overwatcheat.framegrab.FrameGrabberThread
 import org.jire.overwatcheat.framegrab.FrameHandler
 import org.jire.overwatcheat.nativelib.Kernel32
 import org.jire.overwatcheat.settings.Settings
 import org.jire.overwatcheat.util.PreciseSleeper
+import java.util.concurrent.TimeUnit
 
 object Main {
 
@@ -75,11 +73,14 @@ object Main {
         val toggleUIThread = ToggleUIThread(Settings.keyboardId, *Settings.toggleKeyCodes)
 
         val preciseSleeper = PreciseSleeper[Settings.aimPreciseSleeperType] ?: PreciseSleeper.YIELD
+        val aimMode = AimMode[Settings.aimMode] ?: AimMode.TRACKING
         val aimBotThread = AimBotThread(
             captureCenterX, captureCenterY,
             maxSnapX, maxSnapY,
             preciseSleeper,
-            Settings.aimCpuThreadAffinityIndex
+            Settings.aimCpuThreadAffinityIndex,
+            aimMode,
+            TimeUnit.MILLISECONDS.toNanos(Settings.flickPause)
         )
 
         frameGrabberThread.start()

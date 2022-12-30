@@ -18,6 +18,7 @@
 
 package org.jire.overwatcheat.settings
 
+import org.jire.overwatcheat.aimbot.AimMode
 import org.jire.overwatcheat.util.PreciseSleeper
 import java.awt.event.KeyEvent
 import java.io.File
@@ -27,9 +28,9 @@ object Settings {
     internal val nameToSetting: MutableMap<String, Setting> = HashMap()
 
     val aimKey by IntSetting("aim_key", 1)
-    val aimMode by IntSetting("aim_mode", 0)
+    val aimMode by IntSetting("aim_mode", AimMode.TRACKING.type)
     val flickPixels by IntSetting("flick_shoot_pixels", 5)
-    val flickPause by IntSetting("flick_pause_duration", 300)
+    val flickPause by LongSetting("flick_pause_duration", 300L)
     val sensitivity by FloatSetting("sensitivity", 15.0F)
     val fps by DoubleSetting("fps", 60.0)
     val aimDurationMillis by FloatSetting("aim_duration_millis", 3.5F)

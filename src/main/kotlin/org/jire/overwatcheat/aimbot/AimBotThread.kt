@@ -22,7 +22,14 @@ import net.openhft.affinity.AffinityLock
 import org.jire.overwatcheat.FastRandom
 import org.jire.overwatcheat.Keyboard
 import org.jire.overwatcheat.Mouse
+import org.jire.overwatcheat.aimbot.AimBotState.aimData
+import org.jire.overwatcheat.aimbot.AimBotState.flicking
 import org.jire.overwatcheat.settings.Settings
+import org.jire.overwatcheat.settings.Settings.aimDurationMillis
+import org.jire.overwatcheat.settings.Settings.aimDurationMultiplierBase
+import org.jire.overwatcheat.settings.Settings.aimDurationMultiplierMax
+import org.jire.overwatcheat.settings.Settings.flickPixels
+import org.jire.overwatcheat.settings.Settings.mouseId
 import org.jire.overwatcheat.util.FastAbs
 import org.jire.overwatcheat.util.PreciseSleeper
 import java.util.concurrent.ThreadLocalRandom
@@ -34,10 +41,12 @@ class AimBotThread(
     val captureCenterX: Int, val captureCenterY: Int,
     val maxSnapX: Int, val maxSnapY: Int,
     val preciseSleeper: PreciseSleeper,
-    val cpuThreadAffinityIndex: Int
+    val cpuThreadAffinityIndex: Int,
+    val aimMode: AimMode,
+    val flickPauseNanos: Long,
 ) : Thread("Aim Bot") {
 
-    val aimDurationNanos = (Settings.aimDurationMillis * 1_000_000)
+    val aimDurationNanos = (aimDurationMillis * 1_000_000)
 
     val random = FastRandom()
 
@@ -62,16 +71,16 @@ class AimBotThread(
                     }
                     wasPressed = pressed
                     if (!pressed) {
-                        AimBotState.aimData = 0
+                        aimData = 0
                         return@measureNanoTime
-                    } else if (Settings.aimMode == 1) {
-                        AimBotState.flicking = true
+                    } else if (aimMode.flicks) {
+                        flicking = true
                     }
-                    useAimData(AimBotState.aimData)
+                    useAimData(aimData)
                 }
                 val sleepTimeMultiplier = max(
-                    Settings.aimDurationMultiplierMax,
-                    (Settings.aimDurationMultiplierBase + tlr.nextFloat())
+                    aimDurationMultiplierMax,
+                    (aimDurationMultiplierBase + tlr.nextFloat())
                 )
                 val sleepTime = (aimDurationNanos * sleepTimeMultiplier).toLong() - elapsed
                 if (sleepTime > 100_000) {
@@ -128,13 +137,17 @@ class AimBotThread(
         Mouse.move(
             min(Settings.aimMaxMovePixels, moveX),
             min(Settings.aimMaxMovePixels, moveY),
-            Settings.mouseId
+            mouseId
         )
 
-        if (AimBotState.flicking && FastAbs(moveX) < Settings.flickPixels && FastAbs(moveY) < Settings.flickPixels) {
-            AimBotState.flicking = false
-            Mouse.click(Settings.mouseId)
-            sleep(Settings.flickPause.toLong(), 0)
+        applyFlick(moveX, moveY)
+    }
+
+    private fun applyFlick(moveX: Int, moveY: Int) {
+        if (flicking && FastAbs(moveX) < flickPixels && FastAbs(moveY) < flickPixels) {
+            flicking = false
+            Mouse.click(mouseId)
+            preciseSleeper.preciseSleep(flickPauseNanos)
         }
     }
 
