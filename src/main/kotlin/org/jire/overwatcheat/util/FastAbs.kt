@@ -16,23 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jire.overwatcheat
+package org.jire.overwatcheat.util
 
-import org.jire.overwatcheat.util.FastAbs
-import java.util.*
+object FastAbs {
 
-class FastRandom {
+    @Suppress("NOTHING_TO_INLINE")
+    inline operator fun invoke(value: Int): Int {
+        val mask = value shr 31
+        return (value xor mask) - mask
+    }
 
-    private var x = Random().nextLong()
-
-    operator fun get(max: Int): Int {
-        x = x xor (x shr 12)
-        x = x xor (x shl 25)
-        x = x xor (x shr 27)
-        x *= 2685821657736338717L
-
-        val factor = FastAbs(x) / Long.MAX_VALUE.toDouble()
-        return (max * factor).toInt()
+    @Suppress("NOTHING_TO_INLINE")
+    inline operator fun invoke(value: Long): Long {
+        val mask = value shr 63
+        return (value xor mask) - mask
     }
 
 }

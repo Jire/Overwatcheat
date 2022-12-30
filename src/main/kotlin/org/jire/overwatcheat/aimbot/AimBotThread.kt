@@ -23,9 +23,9 @@ import org.jire.overwatcheat.FastRandom
 import org.jire.overwatcheat.Keyboard
 import org.jire.overwatcheat.Mouse
 import org.jire.overwatcheat.settings.Settings
+import org.jire.overwatcheat.util.FastAbs
 import org.jire.overwatcheat.util.PreciseSleeper
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.system.measureNanoTime
@@ -120,7 +120,7 @@ class AimBotThread(
     }
 
     private fun performAim(dX: Int, dY: Int) {
-        if (abs(dX) > maxSnapX || abs(dY) > maxSnapY) return
+        if (FastAbs(dX) > maxSnapX || FastAbs(dY) > maxSnapY) return
 
         val randomSensitivityMultiplier = 1F - (random[Settings.aimJitterPercent] / 100F)
         val moveX = (dX / Settings.sensitivity * randomSensitivityMultiplier).toInt()
@@ -131,7 +131,7 @@ class AimBotThread(
             Settings.mouseId
         )
 
-        if (AimBotState.flicking && abs(moveX) < Settings.flickPixels && abs(moveY) < Settings.flickPixels) {
+        if (AimBotState.flicking && FastAbs(moveX) < Settings.flickPixels && FastAbs(moveY) < Settings.flickPixels) {
             AimBotState.flicking = false
             Mouse.click(Settings.mouseId)
             sleep(Settings.flickPause.toLong(), 0)
