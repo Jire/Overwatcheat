@@ -24,29 +24,27 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 enum class PreciseSleeper(val type: Int) {
 
     YIELD(0) {
-        override fun wait() {
+        override fun waitSleep() {
             Thread.yield()
         }
     },
     SPIN_WAIT(1) {
-        override fun wait() {
+        override fun waitSleep() {
             Thread.onSpinWait()
         }
     },
     SLEEP(2) {
-        override fun wait() {
+        override fun waitSleep() {
             Thread.sleep(0)
         }
     };
 
-    abstract fun wait()
+    abstract fun waitSleep()
 
     fun preciseSleep(totalNanos: Long) {
         val startTime = System.nanoTime()
-
-        // busy-waiting
         while (System.nanoTime() - startTime < totalNanos) {
-            wait()
+            waitSleep()
         }
     }
 
