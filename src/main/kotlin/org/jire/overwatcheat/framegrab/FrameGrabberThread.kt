@@ -31,7 +31,9 @@ class FrameGrabberThread(
         try {
             while (true) {
                 val frame = frameGrabber.grabImage()
-                frameHandler.handle(frame)
+                if (frame) {
+                    frameHandler.handle(frame)
+                }
             }
         } finally {
             frameGrabber.stop()
