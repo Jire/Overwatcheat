@@ -1,0 +1,32 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+  overwatcheat:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+      - name: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: 19
+          distribution: oracle
+      - name: build
+        run: gradlew overwatcheat
+      - uses: actions/upload-artifact@v3
+        with:
+          name: overwatcheat
+          path: build/libs/Overwatcheat 5.1.0
+          if-no-files-found: error
