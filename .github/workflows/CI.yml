@@ -28,5 +28,5 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: overwatcheat
-          path: build/libs/Overwatcheat 5.1.0
+          path: "build/Overwatcheat 5.1.0"
           if-no-files-found: error
