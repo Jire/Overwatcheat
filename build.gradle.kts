@@ -62,9 +62,9 @@ tasks {
 
 fun TaskContainerScope.configureShadowJar() {
     shadowJar {
-        archiveBaseName.set("Overwatcheat")
+        archiveBaseName.set("overwatcheat")
         archiveClassifier.set("")
-        archiveVersion.set("${project.version}")
+        archiveVersion.set("")
 
         isZip64 = true
         //minimize() // needs to be updated for Java 19 support
@@ -96,8 +96,7 @@ fun TaskContainerScope.configureOverwatcheat() {
     register("overwatcheat") {
         dependsOn(shadowJar)
         doLast {
-            val version = version
-            val name = "Overwatcheat $version"
+            val name = "overwatcheat"
 
             val buildDir = file("build/")
 
@@ -107,7 +106,7 @@ fun TaskContainerScope.configureOverwatcheat() {
 
             val jarName = "${name}.jar"
             val jar = dir.resolve(jarName)
-            val allJar = buildDir.resolve("libs/Overwatcheat-${version}.jar")
+            val allJar = buildDir.resolve("libs/overwatcheat.jar")
             allJar.copyTo(jar, true)
 
             dir.writeStartBat(name, jarName)
@@ -122,7 +121,7 @@ fun TaskContainerScope.configureOverwatcheat() {
 }
 
 fun File.writeStartBat(name: String, jarName: String) =
-    resolve("Start ${name}.bat")
+    resolve("run.bat")
         .writeText(
             """@echo off
 cd /d "%~dp0"
