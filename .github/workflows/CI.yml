@@ -24,7 +24,7 @@ jobs:
           java-version: 19
           distribution: oracle
       - name: build
-        run: gradlew overwatcheat
+        run: ./gradlew overwatcheat
       - uses: actions/upload-artifact@v3
         with:
           name: overwatcheat
