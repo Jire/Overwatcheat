@@ -16,7 +16,7 @@ _Free, open-source undetected color cheat for Overwatch!_
 
 **Beginner's Guide**
 
-Before doing anything, make sure you have Java Development Kit (JDK) 8 or later installed.
+Before doing anything, make sure you have Java Development Kit (JDK) 19 or later installed.
 
 The first step is to compile the source code into a usable cheat program.
 
